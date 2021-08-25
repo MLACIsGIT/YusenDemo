@@ -1,0 +1,20 @@
+{
+  "name": "api-server",
+  "version": "1.0.0",
+  "description": "Basic server for openapi and SwaggerUI",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon -r dotenv/config src/app.js"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "swagger-ui-express": "^4.1.6",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  },
+  "type": "module"
+}

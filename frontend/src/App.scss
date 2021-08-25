@@ -1,0 +1,111 @@
+// Add your variables BEFORE importing bootstrap, so that they will override bootstrap variables.
+//Bootstrap colors
+$primary: #06183d;
+$secondary: #99e7ff;
+$success: #ff6d10;
+$info: #333333;
+$warning: #ffc933;
+$danger: #c08080;
+$light: #cccccc;
+$dark: #333333;
+
+@import "~bootstrap/scss/bootstrap.scss";
+
+/* DESIGN colors */
+$DESIGN_ORANGE: #ff6d10;
+$DESIGN_DARK_BLUE: #06183d;
+$DESIGN_LIGHT_BLUE: #00b9f2;
+$DESIGN_LIGHT_BLUE_40: #33cfff;
+$DESIGN_LIGHT_BLUE_20: #99e7ff;
+$DESIGN_BLACK_100: #000;
+$DESIGN_BLACK_80: #333333;
+$DESIGN_BLACK_40: #999999;
+$DESIGN_BLACK_20: #cccccc;
+$DESIGN_BLACK_10: #e6e6e6;
+$DESIGN_WHITE: #fff;
+$DESIGN_SECONDARY_GREEN: #45bd8c;
+$DESIGN_SECONDARY_PURPLE: #615eaf;
+$DESIGN_SECONDARY_YELLOW: #ffc933;
+
+@font-face {
+  font-family: "GTPressuraMono";
+  src: url("//db.onlinewebfonts.com/t/3b1b00a3a96beb230182643b219d0462.eot");
+  src: url("//db.onlinewebfonts.com/t/3b1b00a3a96beb230182643b219d0462.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/3b1b00a3a96beb230182643b219d0462.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/3b1b00a3a96beb230182643b219d0462.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/3b1b00a3a96beb230182643b219d0462.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/3b1b00a3a96beb230182643b219d0462.svg#GTPressuraMono")
+      format("svg");
+}
+
+@font-face {
+  font-family: "Akkurat";
+  src: url("//db.onlinewebfonts.com/t/cf3327022417d4ff7f54f0963c4f41ea.eot");
+  src: url("//db.onlinewebfonts.com/t/cf3327022417d4ff7f54f0963c4f41ea.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/cf3327022417d4ff7f54f0963c4f41ea.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/cf3327022417d4ff7f54f0963c4f41ea.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/cf3327022417d4ff7f54f0963c4f41ea.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/cf3327022417d4ff7f54f0963c4f41ea.svg#Akkurat")
+      format("svg");
+}
+
+@font-face {
+  font-family: "Akkurat-Bold";
+  src: url("//db.onlinewebfonts.com/t/cc4c7e3aa2ab2258b5e0bc946be1093a.eot");
+  src: url("//db.onlinewebfonts.com/t/cc4c7e3aa2ab2258b5e0bc946be1093a.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/cc4c7e3aa2ab2258b5e0bc946be1093a.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/cc4c7e3aa2ab2258b5e0bc946be1093a.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/cc4c7e3aa2ab2258b5e0bc946be1093a.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/cc4c7e3aa2ab2258b5e0bc946be1093a.svg#Akkurat-Bold")
+      format("svg");
+}
+
+@font-face {
+  font-family: "Akkurat-Italic";
+  src: url("//db.onlinewebfonts.com/t/4954876b2373a07f77b38bc54d16e6fc.eot");
+  src: url("//db.onlinewebfonts.com/t/4954876b2373a07f77b38bc54d16e6fc.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/4954876b2373a07f77b38bc54d16e6fc.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/4954876b2373a07f77b38bc54d16e6fc.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/4954876b2373a07f77b38bc54d16e6fc.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/4954876b2373a07f77b38bc54d16e6fc.svg#Akkurat-Italic")
+      format("svg");
+}
+
+@font-face {
+  font-family: "Akkurat-Light";
+  src: url("//db.onlinewebfonts.com/t/bc9fa02b4227255be2387a7e19a3e09b.eot");
+  src: url("//db.onlinewebfonts.com/t/bc9fa02b4227255be2387a7e19a3e09b.eot?#iefix")
+      format("embedded-opentype"),
+    url("//db.onlinewebfonts.com/t/bc9fa02b4227255be2387a7e19a3e09b.woff2")
+      format("woff2"),
+    url("//db.onlinewebfonts.com/t/bc9fa02b4227255be2387a7e19a3e09b.woff")
+      format("woff"),
+    url("//db.onlinewebfonts.com/t/bc9fa02b4227255be2387a7e19a3e09b.ttf")
+      format("truetype"),
+    url("//db.onlinewebfonts.com/t/bc9fa02b4227255be2387a7e19a3e09b.svg#Akkurat-Light")
+      format("svg");
+}
+
+body {
+  margin: 0;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-width: 320px;
+}

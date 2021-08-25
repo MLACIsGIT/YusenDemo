@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+    database:
+        image: mongo
+        ports:
+            - 27037:27017
+        volumes:
+            - ./database:/data/db
+    backend:
+        build: backend
+        ports:
+            - '4000:4000'
+        environment:
+            - MONGO_CONNECT='mongodb://database:27017/CUSTOMERPORTAL'
+            - JWT_KEY='4FoXKpWgPJMw'
+            - PORT=4000
+            - LOCAL_SYSTEM_IP=*
+            - REG_EMAIL_HOST='smtp.mailtrap.io'
+            - REG_EMAIL_PORT= 2525
+            - REG_EMAIL_FROM='regisztracio@customerportal.hu'
+            - REG_EMAIL_USER='9982e3b2313bca'
+            - REG_EMAIL_PASS='b6cd322168bd89'
+            - REG_EMAIL_LINK_ACCEPTED='http://localhost:3000/firstlogin'
+            - REG_EMAIL_LINK_DISMISSED='http://localhost:3000/dismissregistration'
+        volumes:
+            - ./backend:/app
+        depends_on:
+            - database
+    frontend:
+        build: frontend
+        ports:
+            - '3000:3000'
+        environment:
+            - REACT_APP_API_BASE_URL='http://localhost:4000'
+        volumes:
+            - ./frontend:/app
+        depends_on:
+            - backend
+
+    docs:
+        build: docs
+        ports:
+            - '5000:5000'
+        environment:
+            - API_DOC_PORT=5000
+        volumes:
+            - ./docs:/app

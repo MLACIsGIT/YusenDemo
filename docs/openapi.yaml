@@ -1,0 +1,709 @@
+openapi: 3.0.1
+info:
+  title: CUSTOMER PORTAL
+  description: FullStack API tutorial
+  termsOfService: http://swagger.io/terms/
+  contact:
+    email: molnar.laszlo@selester.hu
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:4000/
+tags:
+- name: api
+  description: Elérhetőség vizsgálata és authentikáció
+- name: deliveries
+  description: Szállítások adatainak lekérdezése (token-el védett)
+- name: invoices
+  description: Számlázási adatok lekérdezése (token-el védett)
+- name: localsystem
+  description: Kapcsolódás a lokális ügyviteli rendszerhez (csak a lokális ügyviteli rendszer szerverének IP címéről elérehető)
+- name: news
+  description:  A /home oldalon (Hírek, üzenetek menüpont) található hírfolyam kiszolgálója (token-el védett)
+- name: stocks
+  description: Készlet adatok lekérdezése (token-el védett)
+- name: users
+  description: Felhasználók adatainak kezelése (token-el védett)
+paths:
+  /api/heartbeat/:
+    get:
+      tags:
+      - api
+      summary: Szerviz elérhetőségének ellenőrzése
+      responses:
+        200:
+          description: A szerviz fogadja az üzeneteket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/heartbeat'
+  /api/login/:
+    post:
+      tags:
+      - api
+      summary: Login
+      description: Belépés a rendszerbe. Helyes belépési adatok esetén token-el tér vissza.
+      requestBody:
+        description: Belépéshez használt email és jelszó (kötelező)
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/loginData'
+      responses:
+        200:
+          description: Belépés elfogadva
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        410:
+          description: Belépés elutasítva. A "message" értéke "invalid"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /deliveries/get/:
+    get:
+      tags:
+      - deliveries
+      summary: Szállítási adatok lekérdezése
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: filters
+          schema:
+            type: string
+        - in: header
+          name: orderBy
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/delivery'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /invoices/get/:
+    get:
+      tags:
+      - invoices
+      summary: Számla adatok lekérdezése
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: filters
+          schema:
+            type: string
+        - in: header
+          name: orderBy
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invoices'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /news/getall/:
+    get:
+      tags:
+      - news
+      summary: Hírfolyam adatainak lekérdezése
+      parameters:
+        - in: header
+          name: token
+          description: Ha nincsen megadva token (nem bejelentkezett felhasználó kéri le a híreket) akkor csak azok fognak lejönni, amelyek még nem jártak le. (Az expireDate mező tartalma későbbi, mint a mai nap.)
+          schema:
+            type: string
+        - in: header
+          name: language
+          description: Csak a megadott nyelven jönnek le a hírek.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/news'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /news/get/:
+    get:
+      tags:
+      - news
+      summary: Egy hír lekérdezése id alapján
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/news'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+        500:
+          description: Nem találta meg az adatot.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /news/put/:
+    put:
+      tags:
+      - news
+      summary: Egy hír frissítése / ha még nincs id-je, akkor új felvitel
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: id
+          schema:
+            type: string
+      requestBody:
+        description: A hír adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/news'
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/news'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /news/delete/:
+    delete:
+      tags:
+      - news
+      summary: Egy hír törlése
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: id
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/news'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /localsystem/heartbeat/:
+    get:
+      tags:
+      - localsystem
+      summary: Szerviz elérhetőségének ellenőrzése
+      responses:
+        200:
+          description: A szerviz fogadja az üzeneteket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/heartbeat'
+  /localsystem/register/:
+    post:
+      tags:
+      - localsystem
+      summary: Új felhasználó regisztrálása
+      description: A helyi ügyviteli rendszerből ezen a végponton keresztül lehet felküldeni az új ügyfeleket.
+      requestBody:
+        description: Új felhasználó adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/userBaseData'
+      responses:
+        200:
+          description: A message tartalma "validation-email-sent"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+        406:
+          description: A message tartalma "user-already-exists"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /localsystem/invoices/upload/:
+    post:
+      tags:
+      - localsystem
+      summary: Számla felküldése
+      description: A helyi ügyviteli rendszerből ezen a végponton keresztül lehet felküldeni számlákat. Ha egy számla már létezik az adatbázisban (azonosítás externalSystemId alapján) akkor frissíti a számla adatokat.
+      requestBody:
+        description: Számla adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/invoice'
+      responses:
+        200:
+          description: A számla felküldése sikeres
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invoice'
+  /localsystem/deliveries/upload/:
+    post:
+      tags:
+      - localsystem
+      summary: Szállítási feladat felküldése
+      description: A helyi ügyviteli rendszerből ezen a végponton keresztül lehet felküldeni szállítási feladatokat. Ha egy szállítási feladat már létezik az adatbázisban (azonosítás externalSystemId alapján) akkor frissíti annak adatait.
+      requestBody:
+        description: A szállítás adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/delivery'
+      responses:
+        200:
+          description: A szállítás felküldése sikeres
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/delivery'
+  /localsystem/stocks/upload/:
+    post:
+      tags:
+      - localsystem
+      summary: Készlet adatok felküldése
+      description: A helyi ügyviteli rendszerből ezen a végponton keresztül lehet felküldeni a készleteket. Ha egy áru készlete már létezik az adatbázisban (azonosítás externalSystemId alapján) akkor frissíti annak adatait.
+      requestBody:
+        description: A készlet adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/stock'
+      responses:
+        200:
+          description: Az áru készlet adatainak felküldése sikeres
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/stock'
+  /stocks/get/:
+    get:
+      tags:
+      - stocks
+      summary: Készlet adatok lekérdezése
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: filters
+          schema:
+            type: string
+        - in: header
+          name: orderBy
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/stock'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /users/extendtokenvalidity/:
+    get:
+      tags:
+      - users
+      summary: Token érvényességének meghosszabbítása (új token kérése érvényes token megadásával)
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /users/dismissRegistration/:
+    delete:
+      tags:
+      - users
+      summary: Meghívás elutasítása.
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+        410:
+          description: Ha a felhasználó idő közben aktiválva lett, akkor már az e-mailben kapott token-el már nem lehet törölni és a hívás ezzel a hibakóddal tér vissza. A "message" tartalma "invalid"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /users/get/:
+    get:
+      tags:
+      - users
+      summary: Felhasználó adatainak lekérése. A végpont a jelszót nem szolgáltatja ki.
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /users/put/:
+    put:
+      tags:
+      - users
+      summary: Felhasználó adatainak frissítése.
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+      requestBody:
+        description: A felhasználó adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /users/putandlogin/:
+    put:
+      tags:
+      - users
+      summary: Felhasználó adatainak frissítése és a felhasználó beléptetése a rendszerbe.
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+      requestBody:
+        description: A felhasználó adatai
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+        410:
+          description: A felhasználó nincs Status=ACTIVE állapotban.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+
+components:
+  schemas:
+    delivery:
+      type: object
+      properties:
+        externalSystemId:
+          type: string
+        PartnerId:
+          type: string
+        OrderNo:
+          type: string
+        PurchaseOrderNo:
+          type: string
+        LoadingPlace:
+          type: string
+        LoadingDate:
+          type: string
+        UnloadingPlace:
+          type: string
+        UnloadingDate:
+          type: string
+        Status:
+          type: string
+          enum: [DELIVERED, NOT DELIVERED, IN-PROGRESS]
+    heartbeat:
+      type: object
+      properties:
+        heartbeat:
+          type: boolean
+    loginData:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    token:
+      type: object
+      properties:
+        token:
+          type: string
+    message:
+      type: object
+      properties:
+        message:
+          type: string
+    invoice:
+      type: object
+      properties:
+        externalSystemId:
+          type: string
+        PartnerId:
+          type: string
+        invoiceNumber:
+          type: string
+        invoiceType:
+          type: string
+          enum: [A/P INVOICE, A/R INVOICE, CREDIT NOTE, A/R CREDIT NOTE]
+        invoiceDate:
+          type: string
+        deliveryDate:
+          type: string
+        paymentMethod:
+          type: string
+          enum: [BANKTRANSFER, CASH]
+        dueDate:
+          type: string
+        customerName:
+          type: string
+        customerCountryCode:
+          type: string
+        customerPostalCode:
+          type: string
+        customerCity:
+          type: string
+        customerAddressDetails:
+          type: string
+        customerTaxNum:
+          type: string
+        customerGroupMemberTaxNum:
+          type: string
+        invoiceCurrency:
+          type: string
+        sumOfNet:
+          type: number
+        sumOfTax:
+          type: number
+        sumOfGross:
+          type: number
+        payStatus:
+          type: string
+          enum: [PAYED, NOT PAYED]
+        fullyPaidDate:
+          type: string
+        paidAmount:
+          type: number
+    invoices:
+      type: object
+      properties:
+        docs:
+          type: array
+          items:
+            $ref: '#/components/schemas/invoice'
+    news:
+      type: object
+      properties:
+        date:
+          type: string
+        expireDate:
+          type: string
+        language:
+          type: string
+        title:
+          type: string
+        shortDescription:
+          type: string
+        linkToArticle:
+          type: string
+    stock:
+      type: object
+      properties:
+        externalSystemId:
+          type: string
+        PartnerId:
+          type: string
+        ItemNo:
+          type: string
+        Description:
+          type: string
+        ProdDate:
+          type: string
+        Lot:
+          type: string
+        Status:
+          type: string
+          enum: [Normal, Damaged]
+        Weight:
+          type: number
+        StockAvailable:
+          type: number
+        StockReserved:
+          type: number  
+    userBaseData:
+      type: object
+      properties:
+        user:
+          type: object
+          properties:
+            localSystemId:
+              type: string
+            name:
+              type: string
+            email:
+              type: string
+            userLevel:
+              type: string
+              enum: [OWNER_SA, OWNER_USER, CUSTOMER]
+            language:
+              type: string
+    user:
+      type: object
+      properties:
+        localSystemId:
+          type: string
+        emailAnnouncementsAccepted:
+          type: boolean
+        newsletterAccepted:
+          type: boolean
+        name:
+          type: string
+        email:
+          type: string
+        status:
+          type: string
+          enum: [NOT ACCEPTED, ACTIVE, INACTIVE]
+        userLevel:
+          type: string
+          enum: [OWNER_SA, OWNER_USER, CUSTOMER]
+        language:
+          type: string

@@ -1,0 +1,10 @@
+.login-form {
+  .button-area {
+    display: flex;
+    justify-content: space-between;
+
+    button[type="submit"] {
+      letter-spacing: 1px;
+    }
+  }
+}

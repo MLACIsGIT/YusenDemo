@@ -1,0 +1,24 @@
+@import '../../../App.scss';
+
+.page-contact-koper {
+    main {
+        position: relative;
+        height: 70vh;
+        min-height: 768px;
+        background-image: url(./BackgroundKoper.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+}
+
+
+@media only screen and (max-width: 530px) {
+    .page-contact-koper {
+      main {
+        height: 0;
+        background-image: none;
+        background-color: $DESIGN_BLACK_10;
+      }
+    }
+  }
+  

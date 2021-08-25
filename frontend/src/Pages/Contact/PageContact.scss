@@ -1,0 +1,12 @@
+@import "../../App.scss";
+
+.page-contact {
+    position: relative;
+
+    .page-contact-main {
+        width: 100%;
+        height: 70vh;
+        background-image: url("./BackgroundContact.png");
+        background-size: cover;
+    }
+}

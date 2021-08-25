@@ -1,0 +1,75 @@
+@import "../../../App.scss";
+
+.hamMenuItem {
+  background-color: $DESIGN_BLACK_20;
+  margin: 5px;
+  cursor: pointer;
+  height: 100px;
+  width: 30%;
+
+  .textArea {
+    display: block;
+    margin: 12px 12px 40px 12px;
+    padding: 10px;
+
+    .title {
+      border-bottom: solid;
+      border-color: $DESIGN_DARK_BLUE;
+      border-bottom-width: 1px;
+      padding-bottom: 3px;
+      margin-bottom: 12px;
+
+      h4 {
+        color: $DESIGN_DARK_BLUE;
+        font-family: "GTPressuraMono";
+        font-size: 1rem;
+        text-transform: uppercase;
+        margin: 0px;
+      }
+    }
+
+    .descr {
+      color: $DESIGN_DARK_BLUE;
+
+      h6 {
+        font-family: "Akkurat-Light";
+        font-size: 0.8rem;
+        font-weight: 100;
+        margin: 0px;
+      }
+    }
+  }
+}
+
+.hamMenuItem.selected {
+  .title {
+    h4 {
+      color: $success;
+    }
+  }
+}
+
+.hamMenuItem:hover {
+  background-color: darken($DESIGN_BLACK_20, 25%);
+}
+
+@media only screen and (max-width: 800px) {
+  .hamMenuItem {
+    margin: 3px;
+
+    .textArea {
+      margin: 3px;
+      padding: 5px;
+
+      .title {
+        margin-bottom: 0px;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .hamMenuItem {
+    width: 90%;
+  }
+}

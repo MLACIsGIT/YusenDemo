@@ -1,0 +1,16 @@
+@import "../../App.scss";
+
+.news {
+  margin: 15px 40px 10px 40px;
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  .news {
+    margin: 3px;
+  }
+}

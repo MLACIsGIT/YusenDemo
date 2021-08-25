@@ -1,0 +1,42 @@
+@import "../../App.scss";
+
+.page-dismissRegistration {
+  main {
+    position: relative;
+    height: 100vh;
+    min-height: 768px;
+    background-image: url(./backgroundDismissRegistration.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    .infobox {
+      .header-area {
+        text-align: center;
+      }
+
+      .infoText-area {
+        text-align: center;
+
+        h6 {
+          line-height: 200%;
+        }
+      }
+
+      .input-field-area {
+        margin: 40px 0;
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .page-dismissRegistration {
+    main {
+      height: 0;
+      background-image: none;
+      background-color: $DESIGN_BLACK_10;
+    }
+  }
+}

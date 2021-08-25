@@ -1,0 +1,496 @@
+{
+	"info": {
+		"_postman_id": "67367e44-4996-4455-bf70-3b6687d0cd27",
+		"name": "MasterWork",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "api",
+			"item": [
+				{
+					"name": "heartbeat",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:4000/api/heartbeat",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"heartbeat"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"fuvaros.ceg@admin.hu\",\r\n    \"password\": \"12345678\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/api/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "localsystem",
+			"item": [
+				{
+					"name": "api/localsystem/register Customer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"localSystemId\": \"1038488\",\r\n        \"name\": \"Bedeco Péter\",\r\n        \"email\": \"bedeco.peter@ceg.hu\",\r\n        \"userLevel\": \"CUSTOMER\",\r\n        \"language\": \"hu\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/localsystem/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"localsystem",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localsystem/invoices/upload",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5Njg3NTI0Nzc2LCJpYXQiOjE2Mjk2ODY2MjR9.r2eFxfIvZHCmgJdkTVVSS_1_28s6wEgOS-l5gSzeBYc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"externalSystemId\": \"string\",\r\n  \"PartnerId\": \"string\",\r\n  \"invoiceNumber\": \"string\",\r\n  \"invoiceType\": \"A/P INVOICE\",\r\n  \"invoiceDate\": \"string\",\r\n  \"deliveryDate\": \"string\",\r\n  \"paymentMethod\": \"BANKTRANSFER\",\r\n  \"dueDate\": \"string\",\r\n  \"customerName\": \"string\",\r\n  \"customerCountryCode\": \"string\",\r\n  \"customerPostalCode\": \"string\",\r\n  \"customerCity\": \"string\",\r\n  \"customerAddressDetails\": \"string\",\r\n  \"customerTaxNum\": \"string\",\r\n  \"customerGroupMemberTaxNum\": \"string\",\r\n  \"invoiceCurrency\": \"string\",\r\n  \"sumOfNet\": 0,\r\n  \"sumOfTax\": 0,\r\n  \"sumOfGross\": 0,\r\n  \"payStatus\": \"PAYED\",\r\n  \"fullyPaidDate\": \"string\",\r\n  \"paidAmount\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/localsystem/invoices/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"localsystem",
+								"invoices",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localsystem/deliveries/upload",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5Njg3NTI0Nzc2LCJpYXQiOjE2Mjk2ODY2MjR9.r2eFxfIvZHCmgJdkTVVSS_1_28s6wEgOS-l5gSzeBYc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"externalSystemId\": \"string\",\r\n  \"PartnerId\": \"string\",\r\n  \"OrderNo\": \"string\",\r\n  \"PurchaseOrderNo\": \"string\",\r\n  \"LoadingPlace\": \"string\",\r\n  \"LoadingDate\": \"string\",\r\n  \"UnloadingPlace\": \"string\",\r\n  \"UnloadingDate\": \"string\",\r\n  \"Status\": \"DELIVERED\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/localsystem/deliveries/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"localsystem",
+								"deliveries",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localsystem/stocks/upload",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5Njg3NTI0Nzc2LCJpYXQiOjE2Mjk2ODY2MjR9.r2eFxfIvZHCmgJdkTVVSS_1_28s6wEgOS-l5gSzeBYc",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"externalSystemId\": \"string\",\r\n  \"PartnerId\": \"string\",\r\n  \"ItemNo\": \"string\",\r\n  \"Description\": \"string\",\r\n  \"ProdDate\": \"string\",\r\n  \"Lot\": \"string\",\r\n  \"Status\": \"Normal\",\r\n  \"Weight\": 0,\r\n  \"StockAvailable\": 0,\r\n  \"StockReserved\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/localsystem/stocks/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"localsystem",
+								"stocks",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "localsystem/register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": {\r\n        \"name\": \"Admin Béla\",\r\n        \"email\": \"admin.bela@ceg.hu\",\r\n        \"userLevel\": \"OWNER_SA\",\r\n        \"language\": \"hu\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/localsystem/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"localsystem",
+								"register"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "users/extendtokenvalidity",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMWUwNzk3NTU1YzhlMGZlYzllYjc4ZCIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkFkbWluIELDqWxhIiwiZW1haWwiOiJhZG1pbi5iZWxhQGNlZy5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5NTM0Nzc4ODc5LCJpYXQiOjE2Mjk1MzM4Nzh9.wFUznIZQ0ab8FWAZg_eCYMIhBujHxd93rIzBDa3wh9I",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/users/extendtokenvalidity",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"extendtokenvalidity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5NjkzMDc2MjkzLCJpYXQiOjE2Mjk2OTIxNzZ9.wrZfW341oLKyhn1-cdZytzkWLtht5PvV43R48rtTfEs",
+								"type": "text"
+							},
+							{
+								"key": "id",
+								"value": "6122166717896850c00dd834",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/users/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users/put",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5NjkzMDc2MjkzLCJpYXQiOjE2Mjk2OTIxNzZ9.wrZfW341oLKyhn1-cdZytzkWLtht5PvV43R48rtTfEs",
+								"type": "text"
+							},
+							{
+								"key": "id",
+								"value": "6122166717896850c00dd834",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/users/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"users",
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "news",
+			"item": [
+				{
+					"name": "news/getall",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "language",
+								"value": "hu",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/news/getall",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"news",
+								"getall"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "news/get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5Njg5ODA3ODAxLCJpYXQiOjE2Mjk2ODg5MDd9.-XsOsQloFiE1xCZsJQj9YqCG66aPolAMWFq4kRHfkZQ",
+								"type": "text"
+							},
+							{
+								"key": "id",
+								"value": "6122166717896850c00dd834",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/news/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"news",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "news/put",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5NjkwODQwMzQ3LCJpYXQiOjE2Mjk2ODk5NDB9.J9tv_VUaVfPz8iJp3rPrmMe4u7pJCBPq7u75J6FLJMI",
+								"type": "text"
+							},
+							{
+								"key": "id",
+								"value": "61230138e9374b32886faf36",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"title\",\r\n    \"shortDescription\": \"short description\",\r\n    \"date\": \"2021.08.12\",\r\n    \"expireDate\": \"2021.09.12\",\r\n    \"language\": \"hu\",\r\n    \"linkToArticle\": \"https://selester.hu\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:4000/news/put",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"news",
+								"put"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "news/delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5NjkxMzc4NjQ0LCJpYXQiOjE2Mjk2OTA0Nzh9.abJJ_iL7X0VebrwyRdeGXAb_610UpLOMXdo_IPu-Nu0",
+								"type": "text"
+							},
+							{
+								"key": "id",
+								"value": "61230158e9374b32886faf3a",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/news/delete",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"news",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "stocks",
+			"item": [
+				{
+					"name": "get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "token",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjIxNjY2MTc4OTY4NTBjMDBkZDQ1NyIsInVzZXJMZXZlbCI6Ik9XTkVSX1NBIiwibmFtZSI6IkZ1dmFyb3MgQsOpbGEyIiwiZW1haWwiOiJmdXZhcm9zLmNlZ0BhZG1pbi5odSIsInR5cGUiOiJMT0dJTiIsInZhbGlkIjoxNjI5NjkxOTcxNzM3LCJpYXQiOjE2Mjk2OTEwNzF9.DjZ9QoaKAM3EHtrNdKu9SRRHsFinLmYnQ5ryI24ycKM",
+								"type": "text"
+							},
+							{
+								"key": "filters",
+								"value": "{}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:4000/stocks/get",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "4000",
+							"path": [
+								"stocks",
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

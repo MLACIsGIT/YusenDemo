@@ -1,0 +1,57 @@
+@import "../../App.scss";
+
+.page-settings {
+    .page-settings-main {
+        position: relative;
+        height: 95vh;
+        min-height: 768px;
+        background-image: url(./backgroundSettings.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+
+        .form-border {
+            .form-border-article {
+                .form-border-main {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    h1 {
+                        color: $DESIGN_DARK_BLUE;
+                        font-weight: bolder;
+                        margin-top: 1rem;
+                    }
+
+                    #link-to-gdpr {
+                        font-weight: bolder;
+                    }
+                    
+                    .settingsForm {
+                        display: inline-block;
+                        width: 90%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    .page-settings {
+        background-color: $DESIGN_BLACK_10;
+        .page-settings-main {
+            background-image: none;
+
+            .page-settings-form {
+                margin-top: 2.5rem;
+            }
+        }
+
+        .form-border-main {
+            margin: 0 20px;
+            h1 {
+                display: none;
+            }
+        }
+  }
+}

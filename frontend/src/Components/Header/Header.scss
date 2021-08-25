@@ -1,0 +1,42 @@
+@import "../../App.scss";
+
+@mixin responsiveLogo {
+  display: inline-block;
+
+  @media screen and (max-width: 319px) {
+    width: 70px;
+    @content;
+  }
+
+  @media screen and (min-width: 320px) and (max-width: 799px) {
+    width: 121px;
+    @content;
+  }
+
+  @media screen and (min-width: 320px) and (min-width: 800px) {
+    width: 161px;
+    padding: 12px 0 14px 0;
+    @content;
+  }
+}
+
+.main-header {
+  display: flex;
+  margin: auto;
+  justify-content: space-between;
+  .header-logo {
+    @include responsiveLogo();
+  }
+
+  .logo-area {
+    width: 50%;
+    margin: 8px;
+  }
+
+  .loggedUser-and-languagePicker {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+  }
+}
