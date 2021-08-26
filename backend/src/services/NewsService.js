@@ -21,6 +21,7 @@ export class NewsService {
   }
 
   static async get(id) {
+    console.log('++++ id', id)
     let doc = await News.getById(id);
     return doc;
   }
@@ -29,6 +30,7 @@ export class NewsService {
     if (id) {
       return await News.put(id, news);
     }
+
     return await News.add(news);
   }
 

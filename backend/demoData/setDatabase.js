@@ -3,7 +3,7 @@ import {
   DeliveryService,
   InvoiceService,
   NewsService,
-  UserLevelsService,
+  UserLevelService,
   UserService,
   StockService,
 } from '../src/services';
@@ -20,7 +20,7 @@ export async function setBaseData() {
         level: userLevels[i].level,
         params: JSON.stringify(userLevels[i].params),
       };
-      await UserLevelsService.add(currentLevel);
+      await UserLevelService.add(currentLevel);
     }
   }
 

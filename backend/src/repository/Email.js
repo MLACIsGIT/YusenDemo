@@ -45,11 +45,11 @@ export default class Email {
     const mailOptions = {
         from: process.env.REG_EMAIL_FROM,
         to: this.user.email,
-        subject: 'DEMO INTERNATIONAL CUSTOMER PORTAL regisztráció',
+        subject: 'YUSEN CUSTOMER PORTAL regisztráció',
         text:
-          `Köszönjük, hogy regisztrált!\n\nKérjük erősítse meg szándékát erre a linkre kattintva: ${process.env.REG_EMAIL_LINK_ACCEPTED}/${token}.\n\nHa Ön nem szeretné ezt a szolgáltatást igénybe venni, akkor kérjük kattintson erre a link-re: ${process.env.REG_EMAIL_LINK_DISMISSED}/${token}\n\n\nA DEMONSTRATION INTERNATIONAL csapata`,
+          `Köszönjük, hogy regisztrált!\n\nKérjük erősítse meg szándékát erre a linkre kattintva: ${process.env.REG_EMAIL_LINK_ACCEPTED}/${token}.\n\nHa Ön nem szeretné ezt a szolgáltatást igénybe venni, akkor kérjük kattintson erre a link-re: ${process.env.REG_EMAIL_LINK_DISMISSED}/${token}\n\n\nA YUSEN (Hungary) csapata`,
         html: `<b>Tisztelt ${this.user.name}!</b><br><br>Szeretettel köszöntjük online ügyfélkapu szolgáltatásunk felhasználói között!<br><br>Kérjük erősítse meg e-mail címét <a href="${process.env.REG_EMAIL_LINK_ACCEPTED}/${token}">erre a linkre kattintással.</a>
-        <br><br>Köszönjük!<br><br>Ha Ön nem szeretné ezt a szolgáltatást igénybe venni, akkor kérjük <a href="${process.env.REG_EMAIL_LINK_DISMISSED}/${token}">kattintson ide.</a><br><br><br>A DEMONSTRATION INTERNATIONAL csapata`,
+        <br><br>Köszönjük!<br><br>Ha Ön nem szeretné ezt a szolgáltatást igénybe venni, akkor kérjük <a href="${process.env.REG_EMAIL_LINK_DISMISSED}/${token}">kattintson ide.</a><br><br><br>A YUSEN (Hungary) csapata`,
       };
   
       try {

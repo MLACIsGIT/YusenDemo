@@ -7,11 +7,17 @@ import { languageElements } from "./News-languageElements";
 export default function News(props) {
   const [dataLoadingState, setDataLoadingState] = useState("NOT LOADED");
   const [newsData, setNewsData] = useState([]);
-  const [editedNewsId, setEditedNewsId] = useState(0);
+  const [editedNewsId, setEditedNewsId] = useState("");
 
   useEffect(() => {
     loadData();
   }, []);
+
+  useEffect(() => {
+    if (dataLoadingState === "NOT LOADED") {
+      loadData();
+    }
+  }, [dataLoadingState]);
 
   function loadData() {
     setDataLoadingState("LOADING");
@@ -42,8 +48,39 @@ export default function News(props) {
       });
   }
 
+  function onEditItem(id) {
+    setEditedNewsId(id);
+    setDataLoadingState("EDIT");
+  }
+
+  function onSubmit() {
+    setDataLoadingState("NOT LOADED");
+  }
+
+  function onDeleteItem(id) {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/news/delete`, {
+      method: "DELETE",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+        token: props.loginData.getToken(),
+        id: id,
+      },
+    })
+      .then((data) => {
+        if (data.status !== 200) {
+          throw new Error("result-nok");
+        }
+        setDataLoadingState("NOT LOADED");
+      })
+      .catch((error) => {
+        console.error("Delete failed", error);
+      });
+  }
+
   function addNewNews() {
-    setEditedNewsId(0);
+    setEditedNewsId("");
     setDataLoadingState("EDIT");
   }
 
@@ -76,9 +113,12 @@ export default function News(props) {
           {newsData.map((message) => {
             return (
               <NewsItem
+                key={message._id}
                 language={props.language}
                 loginData={props.loginData}
                 newsData={message}
+                onDeleteItem={onDeleteItem}
+                onEditItem={onEditItem}
                 languageElements={languageElements}
               />
             );
@@ -87,7 +127,12 @@ export default function News(props) {
       )}
       {dataLoadingState === "EDIT" && (
         <div className="news-edit">
-          <NewsEditForm newsId={editedNewsId} language={props.language} loginData={props.loginData} />
+          <NewsEditForm
+            newsId={editedNewsId}
+            language={props.language}
+            loginData={props.loginData}
+            onSubmit={onSubmit}
+          />
         </div>
       )}
     </div>

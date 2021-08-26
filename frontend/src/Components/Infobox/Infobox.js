@@ -1,5 +1,5 @@
 import "./Infobox.scss";
-import headerLogo from "./headerLogo.svg";
+import headerLogo from "./headerLogo.png";
 
 export default function Infobox(props) {
   return (

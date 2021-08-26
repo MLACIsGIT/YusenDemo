@@ -110,6 +110,8 @@ export default function NewsEditForm(props) {
         cache: "no-cache",
         headers: {
           "Content-Type": "application/json",
+          token: props.loginData.getToken(),
+          id: props.newsId,
         },
       })
         .then((data) => {
@@ -124,8 +126,8 @@ export default function NewsEditForm(props) {
         .then((jsonData) => {
           setDataStatus("valid");
           setFieldValues({
-            title: jsonData.name,
-            shortDescription: jsonData.email,
+            title: jsonData.title,
+            shortDescription: jsonData.shortDescription,
             date: jsonData.date,
             expireDate: jsonData.expireDate,
             language: jsonData.language,
@@ -169,9 +171,8 @@ export default function NewsEditForm(props) {
           if (data.status !== 200) {
             throw new Error("result-nok");
           }
-          return data.json();
+          props.onSubmit();
         })
-        .then((jsonData) => {})
         .catch((error) => {
           showMessageShortly(
             error.message === "result-nok"
@@ -254,6 +255,7 @@ export default function NewsEditForm(props) {
 
   return (
     <div className="newsEditForm-form">
+      <h3>NewsEditForm {dataStatus}</h3>
       {!dataStatus && (
         <div className={`alert mt-3 alert-info`} role="alert">
           {languageElementsHandler.get("info-waiting-for-server")}
@@ -336,7 +338,12 @@ export default function NewsEditForm(props) {
             type="select"
             errors={errors}
             fieldValues={fieldValues}
-            optionList={[{ value: "", text: "" }, { value: "hu", text: "hu" }, { value: "de", text: "de" }, { value: "en", text: "en" }]}
+            optionList={[
+              { value: "", text: "" },
+              { value: "hu", text: "hu" },
+              { value: "de", text: "de" },
+              { value: "en", text: "en" },
+            ]}
             handleInputBlur={handleInputBlur}
             handleInputChange={handleInputChange}
             required={true}

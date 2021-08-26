@@ -11,11 +11,11 @@ export default function NewsItem(props) {
   );
 
   function deleteClicked() {
-    alert(`Hello ${props.newsData._id}`);
+    props.onDeleteItem(props.newsData._id);
   }
 
   function editClicked() {
-    alert(`editClicked ${props.newsData._id}`);
+    props.onEditItem(props.newsData._id);
   }
 
   let editButtons;

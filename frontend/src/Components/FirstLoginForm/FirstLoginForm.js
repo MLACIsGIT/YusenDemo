@@ -199,7 +199,7 @@ export default function FirstLoginForm(props) {
           name: fieldValues.name,
           email: fieldValues.email,
           password: fieldValues.password,
-          status: 'ACCEPTED',
+          status: 'ACTIVE',
           gdprAccepted: fieldValues.gdprAccepted ? true : false,
           termsOfServiceAccepted: fieldValues.termsOfServiceAccepted
             ? true

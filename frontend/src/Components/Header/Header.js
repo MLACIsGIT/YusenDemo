@@ -1,5 +1,5 @@
 import './Header.scss';
-import headerLogo from './headerLogo.svg';
+import headerLogo from './headerLogo.png';
 import LanguageSelector from '../LanguageSelector';
 import LoggedUser from '../LoggedUser/LoggedUser';
 import TokenExpirationMessage from '../TokenExpirationMessage/TokenExpirationMessage';

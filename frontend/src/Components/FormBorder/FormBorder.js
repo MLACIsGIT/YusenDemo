@@ -1,5 +1,5 @@
 import "./FormBorder.scss";
-import headerLogo from "./headerLogo.svg";
+import headerLogo from "./headerLogo.png";
 
 export default function FormBorder(props) {
     return (

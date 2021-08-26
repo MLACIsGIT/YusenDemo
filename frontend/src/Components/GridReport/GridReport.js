@@ -104,8 +104,37 @@ export default function GridReport(props) {
     return <></>;
   }
 
+function trial01() {
+  let formdata = new FormData();
+  formdata.append("message", "{\"header\":{\"portalOwnerId\":\"1038482\",\"apiKey\":\"\",\"function\":\"WAT_INTERFACE_DOWNLOAD_FILE\"},\"body\":{\"watUser\":\"molnar.laszlo@selester.hu\",\"fileId\":3577}}");
+
+  let requestOptions = {
+    method: 'POST',
+    mode: "no-cors",
+    body: formdata,
+    redirect: 'follow'
+  };
+  debugger
+  fetch("https://selesterwatstream001.azurewebsites.net/api/StreamFiles?", requestOptions)
+    .then(
+      response => {
+        debugger;
+        response.text()
+      })
+    .then(
+      result => {
+        debugger;
+        console.log(result)
+      })
+    .catch(error => {
+      debugger;
+      console.log('error', error)
+  });
+}
+
   return (
     <div className="grid-report">
+      <button onClick={trial01}>test</button>
       <div className="accordion accordion-flush" id="accordionFlushExample">
         <div className="accordion-item">
           <h2 className="accordion-header" id="grid-report-flush-filter">
