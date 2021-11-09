@@ -6,6 +6,7 @@ import Token from '../repository/Token';
 export class UserService {
   static async register(props) {
     const user = {
+      portalOwnersId: props.user.portalOwnersId,
       localSystemId: props.user.localSystemId,
       name: props.user.name,
       email: props.user.email.toLowerCase().trim(),
@@ -15,49 +16,35 @@ export class UserService {
 
     let dbResult;
 
-    try {
-      dbResult = await User.getByEmail(user.email);
+    dbResult = await User.register(user);
 
-      if (dbResult) {
-        const error = new Error('user-already-exists');
-        error.status = 406;
-        throw error;
-      }
+    const email = new Email(dbResult);
+    const result = await email.sendRegistrationEmail();
 
-      dbResult = await User.add(user);
-
-      const email = new Email(dbResult);
-      const result = await email.sendRegistrationEmail();
-
-      return result;
-    } catch (error) {
-      error.httpCode = 400;
-      throw error;
-    }
+    return result;
   }
 
-  static async dismissRegistration(id) {
+  static async dismissRegistration(portalOwnersId, id) {
     let dbResult;
 
-    dbResult = await User.getById(id);
-
+    dbResult = await User.getById(portalOwnersId, id);
     if (!dbResult || dbResult.status !== 'NOT ACCEPTED') {
       const error = new Error('invalid');
       error.status = 410;
       throw error;
     }
 
-    await User.deleteById(id);
+    await User.deleteById(portalOwnersId, id);
   }
 
   static async import(user) {
     await User.import(user);
   }
 
-  static async get(id) {
+  static async get(portalOwnersId, id) {
     let dbResult;
 
-    dbResult = await User.getById(id);
+    dbResult = await User.getById(portalOwnersId, id);
 
     if (!dbResult) {
       const error = new Error('invalid');
@@ -65,49 +52,66 @@ export class UserService {
       throw error;
     }
 
-    delete dbResult['passHash'];
+    dbResult.passHash = undefined;
 
     return dbResult;
   }
 
-  static async put(id, user) {
-    if (user.password) {
-      user.passHash = await Hash.getHash(user.password);
-      delete user['password'];
-    }
+  static async getByLocalsystemId(portalOwnersId, localsystemId) {
+    let dbResult;
 
-    await User.update(id, user);
-    return {};
+    dbResult = await User.getByLocalsystemId(portalOwnersId, localsystemId);
+
+    if (!dbResult) {
+      const error = new Error('invalid');
+      error.status = 410;
+      throw error;
+    }
+    dbResult.passHash = undefined;
+
+    return dbResult;
   }
 
-  static async putAndLogin(id, user) {
+  static async put(user) {
+    if (user.password) {
+      user.passHash = await Hash.getHash(user.password);
+      delete user.password;
+    }
+
+    let dbResult;
+    dbResult = await User.update(user);
+
+    return dbResult;
+  }
+
+  static async putAndLogin(user) {
     const password = user.password;
     let token;
-    await UserService.put(id, user);
-    token = await UserService.login(user.email, password);
+    await UserService.put(user);
+    token = await UserService.login(user.portalOwnersId, user.email, password);
     return token;
   }
 
-  static async login(email, password) {
+  static async login(portalOwnersId, email, password) {
     let dbResult;
-    dbResult = await User.getByEmail(email);
-
+    dbResult = await User.getByEmail(portalOwnersId, email);
     if (!dbResult || dbResult.status !== 'ACTIVE') {
       const error = new Error('invalid');
       error.status = 410;
       throw error;
     }
+
     let passwordOk = await Hash.compare(password, dbResult.passHash);
     if (!passwordOk) {
       const error = new Error('invalid');
       error.status = 410;
       throw error;
     }
-    return Token.get('LOGIN', dbResult._id, dbResult);
+    return Token.get('LOGIN', dbResult);
   }
 
-  static async extendTokenValidity(id) {
-    let user = await User.getById(id);
-    return Token.get('LOGIN', id, user);
+  static async extendToken(portalOwnersId, id) {
+    let user = await User.getById(portalOwnersId, id);
+    return Token.get('LOGIN', user);
   }
 }

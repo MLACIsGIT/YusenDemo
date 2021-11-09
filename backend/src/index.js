@@ -1,6 +1,6 @@
 import logger from './logger';
 import app from './app';
-import { connectDb } from './db/Mongoose';
+import { connectDb } from './db/msSql';
 
 const PORT = process.env.PORT || 3000;
 

@@ -18,7 +18,7 @@ export default function PageHome(props) {
       />
 
       <article>
-        <div className="news">
+        <div className="news-area">
           <News language={props.language} loginData={props.loginData} />
         </div>
 

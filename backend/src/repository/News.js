@@ -1,55 +1,33 @@
-import { NewsModel } from '../models/db/NewsModel';
+import {
+  WAT_NEWS_GET_ALL,
+  WAT_NEWS_GET_LIST,
+  WAT_NEWS_PUT,
+  WAT_NEWS_DELETE,
+  WAT_NEWS_GET_BY_ID
+} from '../db/storedProcedures';
 
 export default class News {
-  static async add(news) {
-    const newNews = new NewsModel({
-      date: news.date,
-      expireDate: news.expireDate,
-      language: news.language,
-      title: news.title,
-      shortDescription: news.shortDescription,
-      linkToArticle: news.linkToArticle,
-    });
-
-    try {
-      const result = await newNews.save();
-      return result;
-    } catch (e) {
-      const error = new Error(e.message);
-      error.status = 400;
-      throw error;
-    }
-  }
-
-  static async getById(id) {
-    let result = await NewsModel.findOne({ _id: id });
-    if (!result) {
-      throw new Error('not found');
-    }
+  static async getAll(portalOwnersId, language) {
+    let result = await WAT_NEWS_GET_ALL(portalOwnersId, language);
     return result;
   }
 
-  static async getDocs(filters, orderBy) {
-    try {
-      const docs = await NewsModel.find(filters).sort(orderBy);
-      return docs;
-    } catch (e) {
-      const error = new Error(e.message);
-      error.status = 400;
-      throw error;
-    }
+  static async getList(portalOwnersId, language) {
+    let result = await WAT_NEWS_GET_LIST(portalOwnersId, language);
+    return result;
   }
 
-  static async put(id, news) {
-    let doc = await NewsModel.findOneAndUpdate({ _id: id }, news);
-    if (!doc) {
-      throw new Error('not found');
-    }
-
-    return doc;
+  static async getById(portalOwnersId, newsId) {
+    let result = await WAT_NEWS_GET_BY_ID(portalOwnersId, newsId);
+    return result;
   }
 
-  static async delete(id) {
-    await NewsModel.deleteOne( {_id: id });
+  static async put(portalOwnersId, news) {
+    let result = await WAT_NEWS_PUT(portalOwnersId, news);
+    return result;
+  }
+
+  static async delete(portalOwnersId, id) {
+    await WAT_NEWS_DELETE(portalOwnersId, id);
   }
 }

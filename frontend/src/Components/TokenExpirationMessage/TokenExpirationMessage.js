@@ -12,7 +12,7 @@ export default function TokenExpirationMessage(props) {
   const [tokenStatus, setTokenStatus] = useState("NOT VALID");
 
   async function onExtendValidity(e) {
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/users/extendtokenvalidity`, {
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/users/extendtoken`, {
       method: "GET",
       mode: "cors",
       cache: "no-cache",

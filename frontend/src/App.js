@@ -14,7 +14,9 @@ import PageHome from './Pages/Home/PageHome';
 import PageInvoices from './Pages/Invoices/PageInvoices';
 import PageStocks from './Pages/Stocks/PageStocks';
 import PageSettings from './Pages/Settings/PageSettings';
-import PageDeliveries from './Pages/Deliveries/PageDeliveries';
+import PageTracking from './Pages/Tracking/PageTracking';
+import PageTrackingSystem from "./Pages/Tracking/TrackingSystem/PageTrackingSystem";
+import YusenVantage from "./Pages/Tracking/YusenVantage/YusenVantage";
 import LoginData from './Components/repository/LoginData';
 
 function App() {
@@ -105,7 +107,23 @@ function App() {
           </Route>
 
           <Route exact path='/tracking'>
-            <PageDeliveries
+            <PageTracking
+              language={language}
+              loginData={loginData}
+              onLogout={onLogout}
+            />
+          </Route>
+
+          <Route exact path="/tracking/trackingsystem">
+            <PageTrackingSystem
+              language={language}
+              loginData={loginData}
+              onLogout={onLogout}
+            />
+          </Route>
+
+          <Route exact path="/tracking/yusenvantage">
+            <YusenVantage
               language={language}
               loginData={loginData}
               onLogout={onLogout}

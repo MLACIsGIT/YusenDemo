@@ -1,7 +1,7 @@
 import { sign, verify } from 'jsonwebtoken';
 
 export default class Token {
-  static get(type, userId, user) {
+  static get(type, user) {
     const currentDate = new Date();
     let valid;
 
@@ -20,7 +20,8 @@ export default class Token {
 
     return sign(
       {
-        id: userId,
+        portalOwnersId: user.portalOwnersId,
+        id: user._id,
         userLevel: user.userLevel,
         name: user.name,
         email: user.email,

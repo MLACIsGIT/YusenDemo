@@ -1,11 +1,11 @@
 import "./NewsEditForm.scss";
 import { useRef, useState, useEffect } from "react";
-import { useParams, Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import InputFieldSet from "../InputFieldSet/InputFieldSet";
 import { languageElements } from "./NewsEditForm-languageElements";
 import LanguageElementsHandler from "../repository/LanguageElementsHandler";
 import validator from "validator";
-import LoginData from "../repository/LoginData";
+import FieldFormatters from "../repository/FieldFormatters";
 
 export default function NewsEditForm(props) {
   const languageElementsHandler = new LanguageElementsHandler(
@@ -22,7 +22,6 @@ export default function NewsEditForm(props) {
     shortDescription: "",
     date: "",
     expireDate: "",
-    language: "",
     linkToArticle: "",
   });
 
@@ -41,7 +40,6 @@ export default function NewsEditForm(props) {
       shortDescription: "",
       date: "",
       expireDate: "",
-      language: "",
       linkToArticle: "",
     });
   }
@@ -51,7 +49,6 @@ export default function NewsEditForm(props) {
     shortDescription: "",
     date: "",
     expireDate: "",
-    language: "",
     linkToArticle: "",
   });
 
@@ -60,7 +57,6 @@ export default function NewsEditForm(props) {
     shortDescription: useRef(),
     date: useRef(),
     expireDate: useRef(),
-    language: useRef(),
     linkToArticle: useRef(),
   };
 
@@ -78,9 +74,6 @@ export default function NewsEditForm(props) {
       required: isNotEmpty,
     },
     expireDate: {
-      required: isNotEmpty,
-    },
-    language: {
       required: isNotEmpty,
     },
     linkToArticle: {
@@ -128,9 +121,8 @@ export default function NewsEditForm(props) {
           setFieldValues({
             title: jsonData.title,
             shortDescription: jsonData.shortDescription,
-            date: jsonData.date,
-            expireDate: jsonData.expireDate,
-            language: jsonData.language,
+            date: FieldFormatters.onlyDate(jsonData.date),
+            expireDate: FieldFormatters.onlyDate(jsonData.expireDate),
             linkToArticle: jsonData.linkToArticle,
           });
         })
@@ -163,7 +155,7 @@ export default function NewsEditForm(props) {
           shortDescription: fieldValues.shortDescription,
           date: fieldValues.date,
           expireDate: fieldValues.expireDate,
-          language: fieldValues.language,
+          language: props.language,
           linkToArticle: fieldValues.linkToArticle,
         }),
       })
@@ -171,7 +163,7 @@ export default function NewsEditForm(props) {
           if (data.status !== 200) {
             throw new Error("result-nok");
           }
-          props.onSubmit();
+          props.onReturn();
         })
         .catch((error) => {
           showMessageShortly(
@@ -255,7 +247,6 @@ export default function NewsEditForm(props) {
 
   return (
     <div className="newsEditForm-form">
-      <h3>NewsEditForm {dataStatus}</h3>
       {!dataStatus && (
         <div className={`alert mt-3 alert-info`} role="alert">
           {languageElementsHandler.get("info-waiting-for-server")}
@@ -332,23 +323,6 @@ export default function NewsEditForm(props) {
             required={true}
           />
           <InputFieldSet
-            reference={references["language"]}
-            name="language"
-            labelText={languageElementsHandler.get(`field-language`)}
-            type="select"
-            errors={errors}
-            fieldValues={fieldValues}
-            optionList={[
-              { value: "", text: "" },
-              { value: "hu", text: "hu" },
-              { value: "de", text: "de" },
-              { value: "en", text: "en" },
-            ]}
-            handleInputBlur={handleInputBlur}
-            handleInputChange={handleInputChange}
-            required={true}
-          />
-          <InputFieldSet
             reference={references["linkToArticle"]}
             name="linkToArticle"
             labelText={languageElementsHandler.get(`field-linkToArticle`)}
@@ -361,7 +335,14 @@ export default function NewsEditForm(props) {
           />
           <div className="btn-area">
             <button type="submit" className="btn btn-success">
-              {languageElementsHandler.get(`btn-login`)}
+              {languageElementsHandler.get(`btn-save`)}
+            </button>
+            <button
+              type="button"
+              onClick={props.onReturn}
+              className="btn btn-primary"
+            >
+              {languageElementsHandler.get(`btn-cancel`)}
             </button>
           </div>
         </form>

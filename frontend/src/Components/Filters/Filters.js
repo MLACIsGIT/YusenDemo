@@ -25,7 +25,7 @@ export default function Filters(props) {
           <FilterField
             key={`filter-${filterField.fieldName}`}
             fieldName={filterField.fieldName}
-            filterType={filterField.type}
+            filterType={filterField.filterType}
             options={filterField.options}
             language={props.language}
             languageElements={props.languageElements}

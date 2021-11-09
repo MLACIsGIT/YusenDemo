@@ -1,0 +1,22 @@
+@import "../../../App.scss";
+
+.page-tracking-system {
+  main {
+    position: relative;
+    height: 80vh;
+    min-height: 768px;
+    background-image: url(./BackgroundTrackingSystem.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
+
+@media only screen and (max-width: 530px) {
+  .page-tracking-system {
+    main {
+      height: 0;
+      background-image: none;
+      background-color: $DESIGN_BLACK_10;
+    }
+  }
+}

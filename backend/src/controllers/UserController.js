@@ -14,9 +14,27 @@ export const userController = {
 
   async dismissRegistration(req, res, next) {
     try {
-      await UserService.dismissRegistration(req.verified.id);
+      await UserService.dismissRegistration(
+        req.verified.portalOwnersId,
+        req.verified.id
+      );
       res.status(200).json({});
     } catch (error) {
+      next(error);
+    }
+  },
+
+  async extendToken(req, res, next) {
+    try {
+      let token = await UserService.extendToken(
+        req.verified.portalOwnersId,
+        req.verified.id
+      );
+      res.status(200).json({
+        token,
+      });
+    } catch (error) {
+      error.status = 410;
       next(error);
     }
   },
@@ -24,7 +42,20 @@ export const userController = {
   async get(req, res, next) {
     try {
       let result;
-      result = await UserService.get(req.verified.id);
+      result = await UserService.get(
+        req.verified.portalOwnersId,
+        req.verified.id
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getByLocalsystemId(req, res, next) {
+    try {
+      let result;
+      result = await UserService.getByLocalsystemId(req.headers.localsystemid);
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -34,7 +65,14 @@ export const userController = {
   async put(req, res, next) {
     try {
       let result;
-      result = await UserService.put(req.verified.id, req.body);
+      result = await UserService.put({
+        _id: req.verified.id,
+        portalOwnersId: req.verified.portalOwnersId,
+        name: req.body.name,
+        email: req.body.email,
+        emailAnnouncementsAccepted: req.body.emailAnnouncementsAccepted,
+        newsletterAccepted: req.body.newsletterAccepted,
+      });
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -43,10 +81,16 @@ export const userController = {
 
   async putAndLogin(req, res, next) {
     try {
-      let token;
-      token = await UserService.putAndLogin(req.verified.id, req.body);
+      let token = await UserService.putAndLogin({
+        portalOwnersId: req.verified.portalOwnersId,
+        _id: req.verified.id,
+        userLevel: req.verified.userLevel,
+        status: 'ACTIVE',
+        ...req.body,
+      });
+
       res.status(200).json({
-        token
+        token,
       });
     } catch (error) {
       next(error);
@@ -55,7 +99,11 @@ export const userController = {
 
   async login(req, res, next) {
     try {
-      let token = await UserService.login(req.body.email, req.body.password);
+      let token = await UserService.login(
+        req.body.portalOwnersId,
+        req.body.email,
+        req.body.password
+      );
       res.status(200).json({
         token,
       });
@@ -64,16 +112,4 @@ export const userController = {
       next(error);
     }
   },
-
-  async extendTokenValidity(req, res, next) {
-    try {
-      let token = await UserService.extendTokenValidity(req.verified.id);
-      res.status(200).json({
-        token,
-      });
-    } catch (error) {
-      error.status = 410;
-      next(error);      
-    }
-  }
 };

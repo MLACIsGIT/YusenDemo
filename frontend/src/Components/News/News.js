@@ -3,6 +3,7 @@ import "./News.scss";
 import NewsItem from "./NewsItem/NewsItem";
 import NewsEditForm from "../NewsEditForm/NewsEditForm";
 import { languageElements } from "./News-languageElements";
+import FormBorder from "../FormBorder/FormBorder";
 
 export default function News(props) {
   const [dataLoadingState, setDataLoadingState] = useState("NOT LOADED");
@@ -11,7 +12,7 @@ export default function News(props) {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [props.language]);
 
   useEffect(() => {
     if (dataLoadingState === "NOT LOADED") {
@@ -21,13 +22,17 @@ export default function News(props) {
 
   function loadData() {
     setDataLoadingState("LOADING");
-    fetch(`${process.env.REACT_APP_API_BASE_URL}/news/getall`, {
+    const userLevel = props.loginData.getUserLevel();
+    const endpoint = `${process.env.REACT_APP_API_BASE_URL}/news/${(userLevel === 'OWNER_SA') ? 'getall/' : 'getlist/'}`
+    fetch(endpoint, {
       method: "GET",
       mode: "cors",
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
+        portalownersid: process.env.REACT_APP_PORTAL_OWNERS_ID,
         language: props.language,
+        token: props.loginData.getToken(),
       },
     })
       .then((data) => {
@@ -53,7 +58,7 @@ export default function News(props) {
     setDataLoadingState("EDIT");
   }
 
-  function onSubmit() {
+  function onNewFormReturn() {
     setDataLoadingState("NOT LOADED");
   }
 
@@ -90,7 +95,7 @@ export default function News(props) {
       <button
         type="button"
         id="news-btn-add-new"
-        class="btn btn-outline-info"
+        className="btn btn-outline-info"
         onClick={addNewNews}
       >
         +
@@ -127,11 +132,15 @@ export default function News(props) {
       )}
       {dataLoadingState === "EDIT" && (
         <div className="news-edit">
-          <NewsEditForm
-            newsId={editedNewsId}
-            language={props.language}
-            loginData={props.loginData}
-            onSubmit={onSubmit}
+          <FormBorder
+            form={
+              <NewsEditForm
+                newsId={editedNewsId}
+                language={props.language}
+                loginData={props.loginData}
+                onReturn={onNewFormReturn}
+              />
+            }
           />
         </div>
       )}

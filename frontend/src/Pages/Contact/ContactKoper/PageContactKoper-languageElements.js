@@ -1,9 +1,9 @@
 export const languageElements = {
   items: {
     title1: {
-      hu: "Demonstration International",
-      de: "Demonstration International",
-      en: "Demonstration International",
+      hu: "Yusen Logistics (Hungary)",
+      de: "Yusen Logistics (Hungary)",
+      en: "Yusen Logistics (Hungary)",
     },
 
     title2: {
@@ -19,21 +19,21 @@ export const languageElements = {
     },
 
     info2: {
-      hu: "Address-1",
-      de: "Address-1",
-      en: "Address-1",
+      hu: "Capodistria,",
+      de: "Capodistria,",
+      en: "Capodistria,",
     },
 
     info3: {
-      hu: "Address-2",
-      de: "Address-2",
-      en: "Address-2",
+      hu: "Ferrarska ulica 30",
+      de: "Ferrarska ulica 30",
+      en: "Ferrarska ulica 30",
     },
 
     info4: {
-      hu: "Tel: 1234567",
-      de: "Tel: 1234567",
-      en: "Tel: 1234567",
+      hu: "Tel: +386 5 9076760",
+      de: "Tel: +386 5 9076760",
+      en: "Tel: +386 5 9076760",
     },
 
     info5: {
@@ -43,9 +43,9 @@ export const languageElements = {
     },
 
     email: {
-      hu: "info@demo.si",
-      de: "info@demo.si",
-      en: "info@demo.si",
+      hu: "slovenia@si.yusen-logistics.com",
+      de: "slovenia@si.yusen-logistics.com",
+      en: "slovenia@si.yusen-logistics.com",
     },
   },
 };

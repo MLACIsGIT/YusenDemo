@@ -5,7 +5,6 @@ import DataGrid from "../DataGrid/DataGrid";
 import Filters from "../Filters/Filters";
 import LanguageElementsHandler from "../repository/LanguageElementsHandler";
 import ExcelExport from "../ExcelExport/ExcelExport";
-import { reportTemplates } from "./reportTemplates";
 
 export default function GridReport(props) {
   const languageElementsHandler = new LanguageElementsHandler(
@@ -15,21 +14,52 @@ export default function GridReport(props) {
 
   const accordionData = useRef();
   const [reportParams, setReportParams] = useState({});
-  const [dataLoadingState, setDataLoadingState] = useState("NOT LOADED");
+  const [dataLoadingState, setDataLoadingState] = useState("NOT PREPARED");
   const [gridData, setGridData] = useState([]);
   const [gridColumns, setGridColumns] = useState([]);
 
   useEffect(() => {
-    const reportTemplate = reportTemplates.gridReports[props.id];
-    setReportParams(reportTemplate);
-    setGridColumns(
-      reportTemplate.selectedColumns.map((columnName) => {
-        const columnDef = reportTemplate.columns.find((column) => {
-          return column.field === columnName;
-        });
-        return { field: columnName, type: columnDef.type };
+    setDataLoadingState("NOT PREPARED");
+    fetch(`${process.env.REACT_APP_API_BASE_URL}/data/getreportparams`, {
+      method: "GET",
+      mode: "cors",
+      cache: "no-cache",
+      headers: {
+        "Content-Type": "application/json",
+        token: props.loginData.getToken(),
+        reportid: props.id,
+      },
+    })
+      .then((data) => {
+        if (data.status !== 200) {
+          setDataLoadingState("NOT PREPARED");
+          const error = new Error("invalid");
+          error.status = data.status;
+          throw error;
+        }
+        return data.json();
       })
-    );
+      .then((jsonData) => {
+        setReportParams(jsonData);
+
+        setGridColumns(
+          jsonData.selectedColumns.map((columnName) => {
+            const columnDef = jsonData.columns.find((column) => {
+              return column.field === columnName;
+            });
+            return {
+              field: columnName,
+              type: columnDef.type,
+              width: columnDef.width,
+            };
+          })
+        );
+
+        setDataLoadingState("NOT LOADED");
+      })
+      .catch((error) => {
+        setDataLoadingState("NOT PREPARED");
+      });
   }, [props.loginData]);
 
   useEffect(() => {
@@ -45,29 +75,30 @@ export default function GridReport(props) {
   }
 
   function getFilter() {
-    let filterFields = Array.from(
-      document.querySelectorAll(".reportFilter")
-    ).filter((e) => e.value);
+    let filterFields = Array.from(document.querySelectorAll(".reportFilter"))
+      .filter((e) => e.value)
+      .map((e) => {
+        switch (e.type) {
+          case "date":
+            let dateValue = new Date(e.value);
+            let sqlDate = `CONVERT(DATETIME, '${dateValue.getFullYear()}-${
+              dateValue.getMonth() + 1
+            }-${dateValue.getDate()}', 102)`;
+            let sqlDate2359 = `CONVERT(DATETIME, '${dateValue.getFullYear()}-${
+              dateValue.getMonth() + 1
+            }-${dateValue.getDate()} 23:59:59', 102)`;
 
-    if (filterFields.length === 0) {
-      return {};
-    }
+            let result = e.dataset.sql.replace(/\?\(2359\)/g, sqlDate2359);
+            result = result.replace(/\?/g, sqlDate);
 
-    let filters = filterFields.map((filterField) => {
-      let filter = {};
+            return result;
 
-      if (filterField.dataset.comparator) {
-        let expression = {};
-        expression[filterField.dataset.comparator] = filterField.value;
-        filter[filterField.dataset.field] = expression;
-      } else {
-        filter[filterField.dataset.field] = filterField.value;
-      }
+          default:
+            return `(${e.dataset.sql.replace(/\?/g, e.value)})`;
+        }
+      });
 
-      return filter;
-    });
-
-    return { $and: filters };
+    return filterFields.join(" AND ");
   }
 
   function showData() {
@@ -79,7 +110,9 @@ export default function GridReport(props) {
       headers: {
         "Content-Type": "application/json",
         token: props.loginData.getToken(),
-        filters: JSON.stringify(getFilter()),
+        language: props.language,
+        reportid: props.id,
+        filters: getFilter(),
       },
     })
       .then((data) => {
@@ -92,7 +125,7 @@ export default function GridReport(props) {
         return data.json();
       })
       .then((jsonData) => {
-        setGridData(jsonData.docs);
+        setGridData(jsonData.docs.data);
         setDataLoadingState("LOADED");
       })
       .catch((error) => {
@@ -104,37 +137,8 @@ export default function GridReport(props) {
     return <></>;
   }
 
-function trial01() {
-  let formdata = new FormData();
-  formdata.append("message", "{\"header\":{\"portalOwnerId\":\"1038482\",\"apiKey\":\"\",\"function\":\"WAT_INTERFACE_DOWNLOAD_FILE\"},\"body\":{\"watUser\":\"molnar.laszlo@selester.hu\",\"fileId\":3577}}");
-
-  let requestOptions = {
-    method: 'POST',
-    mode: "no-cors",
-    body: formdata,
-    redirect: 'follow'
-  };
-  debugger
-  fetch("https://selesterwatstream001.azurewebsites.net/api/StreamFiles?", requestOptions)
-    .then(
-      response => {
-        debugger;
-        response.text()
-      })
-    .then(
-      result => {
-        debugger;
-        console.log(result)
-      })
-    .catch(error => {
-      debugger;
-      console.log('error', error)
-  });
-}
-
   return (
     <div className="grid-report">
-      <button onClick={trial01}>test</button>
       <div className="accordion accordion-flush" id="accordionFlushExample">
         <div className="accordion-item">
           <h2 className="accordion-header" id="grid-report-flush-filter">
@@ -209,6 +213,8 @@ function trial01() {
                   language={props.language}
                   languageElements={props.report.languageElements}
                   data={gridData}
+                  frameworkComponents={props.report.frameworkComponents}
+                  cellRenderers={props.report.cellRenderers}
                 />
               </div>
             )}

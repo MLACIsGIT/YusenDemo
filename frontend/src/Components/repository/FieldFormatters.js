@@ -19,6 +19,17 @@ export default class FieldFormatters {
     }
   }
 
+  static onlyDate(value) {
+    if (!value) {
+      return null;
+    }
+
+    let yearStr = value.substr(0, 4);
+    let monthStr = value.substr(5, 2);
+    let dayStr = value.substr(8, 2);
+    return `${yearStr}-${monthStr}-${dayStr}`;
+  }
+
   static numberFormatter(value, lang, numberOfDigits) {
     if (isNaN(value)) {
       return "";

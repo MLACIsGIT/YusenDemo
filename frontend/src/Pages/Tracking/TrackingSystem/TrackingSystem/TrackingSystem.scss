@@ -1,0 +1,11 @@
+@import "../../../../App.scss";
+
+.sel-register {
+    form {
+        .btn-area {
+            display: flex;
+            margin: 10px 0 30px 0;
+            justify-content: center;
+        }
+    }
+}

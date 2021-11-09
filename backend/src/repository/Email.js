@@ -40,7 +40,7 @@ export default class Email {
   }
 
   async sendRegistrationEmail() {
-    const token = Token.get('REGISTRATION', this.user._id, this.user.userLevel);
+    const token = Token.get('REGISTRATION', this.user);
 
     const mailOptions = {
         from: process.env.REG_EMAIL_FROM,

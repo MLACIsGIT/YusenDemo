@@ -23,6 +23,10 @@ export default function DataGrid(props) {
     return FieldFormatters.numberFormatter(params.value, props.language, 2);
   }
 
+  function languageTextFormatter(params) {
+    return languageElementsHandler.get(`${params.value}`);
+  }
+
   const columnTypes = {
     date: {
       valueFormatter: dateFormatter,
@@ -35,9 +39,12 @@ export default function DataGrid(props) {
           }
           const filterLocalDateAtMidnightInt =
             filterLocalDateAtMidnight.getFullYear() * 10000 +
-            (filterLocalDateAtMidnight.getMonth()+1) * 100 +
+            (filterLocalDateAtMidnight.getMonth() + 1) * 100 +
             filterLocalDateAtMidnight.getDate();
-          const cellValueInt = parseInt(cellValue.substr(0,4))*10000 + parseInt(cellValue.substr(5,2))*100+parseInt(cellValue.substr(8,2));
+          const cellValueInt =
+            parseInt(cellValue.substr(0, 4)) * 10000 +
+            parseInt(cellValue.substr(5, 2)) * 100 +
+            parseInt(cellValue.substr(8, 2));
           if (cellValueInt < filterLocalDateAtMidnightInt) {
             return -1;
           } else if (cellValueInt > filterLocalDateAtMidnightInt) {
@@ -81,10 +88,34 @@ export default function DataGrid(props) {
       filter: "agNumberColumnFilter",
     },
 
+    languageText: {
+      valueFormatter: languageTextFormatter,
+    },
+
     default: {
       filter: "agTextColumnFilter",
     },
   };
+
+  let gridColumns = props.columns.map((col) => {
+    let fieldCellRenderer;
+
+    if (props.cellRenderers) {
+      fieldCellRenderer = props.cellRenderers.find((renderer) => {
+        return renderer.field === col.field;
+      });
+    }
+
+    if (!fieldCellRenderer) {
+      fieldCellRenderer = {};
+    }
+
+    return {
+      ...col,
+      cellRenderer: fieldCellRenderer["cellRenderer"],
+      cellRendererParams: fieldCellRenderer["cellRendererParams"],
+    };
+  });
 
   return (
     <div
@@ -92,8 +123,12 @@ export default function DataGrid(props) {
       className="ag-theme-alpine"
       style={{ height: "70vh", width: "100%" }}
     >
-      <AgGridReact rowData={props.data} columnTypes={columnTypes}>
-        {props.columns.map((col) => {
+      <AgGridReact
+        rowData={props.data}
+        columnTypes={columnTypes}
+        frameworkComponents={props.frameworkComponents}
+      >
+        {gridColumns.map((col) => {
           return (
             <AgGridColumn
               key={col.field}
@@ -101,6 +136,10 @@ export default function DataGrid(props) {
               headerName={languageElementsHandler.get(`field-${col.field}`)}
               sortable={true}
               type={col.type ? col.type : "default"}
+              cellRenderer={col.cellRenderer}
+              cellRendererParams={col.cellRendererParams}
+              resizable={true}
+              width={col.width}
             ></AgGridColumn>
           );
         })}

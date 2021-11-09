@@ -26,6 +26,7 @@ export default function FilterField(props) {
             <input
               type="date"
               className="form-control reportFilter"
+              data-sql={`${props.fieldName} >= ?`}
               data-comparator={`$gte`}
               data-field={props.fieldName}
             />
@@ -35,6 +36,7 @@ export default function FilterField(props) {
             <input
               type="date"
               className="form-control reportFilter"
+              data-sql={`${props.fieldName} <= ?(2359)`}
               data-comparator={`$lte`}
               data-field={props.fieldName}
             />
@@ -89,6 +91,7 @@ export default function FilterField(props) {
             <input
               type="text"
               className="form-control reportFilter"
+              data-sql={`${props.fieldName} like '?%'`}
               data-field={props.fieldName}
             />
           </div>

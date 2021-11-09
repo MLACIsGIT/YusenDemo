@@ -1,5 +1,3 @@
-import { UserLevelModel } from '../models/db/UserLevelModel';
-
 export default class UserLevel {
   static async add(userLevel) {
     const newUserLevel = new UserLevelModel(userLevel);

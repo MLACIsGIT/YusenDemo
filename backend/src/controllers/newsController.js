@@ -1,11 +1,23 @@
 import { NewsService } from '../services';
 
 export const newsController = {
+  async getList(req, res, next) {
+    try {
+      const result = await NewsService.getList(
+        req.headers.portalownersid,
+        req.headers.language,
+      );
+      res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  },
+
   async getAll(req, res, next) {
     try {
       const result = await NewsService.getAll(
+        req.verified.portalOwnersId,
         req.headers.language,
-        req.verified?.userLevel
       );
       res.status(200).json(result);
     } catch (error) {
@@ -16,7 +28,7 @@ export const newsController = {
   async get(req, res, next) {
     try {
       let result;
-      result = await NewsService.get(req.headers.id);
+      result = await NewsService.get(req.verified.portalOwnersId, req.headers.id);
       res.status(200).json(result);
     } catch (error) {
         error.status=400
@@ -28,7 +40,7 @@ export const newsController = {
   async put(req, res, next) {
       try {
           let result;
-          result = await NewsService.put(req.headers.id, req.body);
+          result = await NewsService.put(req.verified.portalOwnersId, req.body);
           res.status(200).json(result);
       } catch (error) {
           next(error);
@@ -37,7 +49,7 @@ export const newsController = {
 
   async delete(req, res, next) {
       try {
-          await NewsService.delete(req.headers.id);
+          await NewsService.delete(req.verified.portalOwnersId, req.headers.id);
           res.status(200).json({});
       } catch (error) {
           next(error);

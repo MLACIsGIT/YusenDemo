@@ -209,6 +209,8 @@ export default function FirstLoginForm(props) {
             ? true
             : false,
           newsletterAccepted: fieldValues.newsletterAccepted ? true : false,
+
+          language: props.language
         }),
       })
         .then((data) => {

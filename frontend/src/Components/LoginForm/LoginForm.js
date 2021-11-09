@@ -84,6 +84,7 @@ export default function LoginForm(props) {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          portalOwnersId: process.env.REACT_APP_PORTAL_OWNERS_ID,
           email: fieldValues.login,
           password: fieldValues.pass,
         }),

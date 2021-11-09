@@ -14,6 +14,8 @@ servers:
 tags:
 - name: api
   description: Elérhetőség vizsgálata és authentikáció
+- name: data
+  description: Adatlekérdezés (token-el védett)
 - name: deliveries
   description: Szállítások adatainak lekérdezése (token-el védett)
 - name: invoices
@@ -61,6 +63,72 @@ paths:
                 $ref: '#/components/schemas/token'
         410:
           description: Belépés elutasítva. A "message" értéke "invalid"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /data/get/:
+    get:
+      tags:
+      - data
+      summary: Adatok általános lekérdezése
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: language
+          schema:
+            type: string
+        - in: header
+          name: reportid
+          schema:
+            type: string
+        - in: header
+          name: filters
+          schema:
+            type: string
+        - in: header
+          name: orderBy
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invoices'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /data/getreportparams/:
+    get:
+      tags:
+      - data
+      summary: Adatok általános lekérdezése
+      parameters:
+        - in: header
+          name: token
+          schema:
+            type: string
+        - in: header
+          name: reportid
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invoices'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
           content:
             application/json:
               schema:
@@ -138,6 +206,36 @@ paths:
         - in: header
           name: token
           description: Ha nincsen megadva token (nem bejelentkezett felhasználó kéri le a híreket) akkor csak azok fognak lejönni, amelyek még nem jártak le. (Az expireDate mező tartalma későbbi, mint a mai nap.)
+          schema:
+            type: string
+        - in: header
+          name: language
+          description: Csak a megadott nyelven jönnek le a hírek.
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/news'
+        403:
+          description: Érvénytelen token. A "message" tartalma "invalid token"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
+  /news/getlist/:
+    get:
+      tags:
+      - news
+      summary: Hírfolyam adatainak lekérdezése. Csak azok a hírek jönnek le, amelyek még nem avultak el. (expireDate > currentDate)
+      parameters:
+        - in: header
+          name: portalOwnersId
           schema:
             type: string
         - in: header
@@ -278,7 +376,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/userBaseData'
+              $ref: '#/components/schemas/userRegistrationsData'
       responses:
         200:
           description: A message tartalma "validation-email-sent"
@@ -352,6 +450,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/stock'
+  /localsystem/users/get/:
+    get:
+      tags:
+      - localsystem
+      summary: Visszaadja egy ügyfél adminisztrátorának adatait
+      description: A helyi ügyviteli rendszer ezen a végponton keresztül kérheti le az ügyfélhez megadott adminisztrátor (és csak a z adminisztrátor!) adatait.
+      parameters:
+        - in: header
+          name: localsystemid
+          schema:
+            type: string
+      responses:
+        200:
+          description: Sikeres kérés
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userAllData'
+        410:
+          description: Az ügyfélhez (localsystemId-hez) nem tartozik adminisztrátor.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/message'
   /stocks/get/:
     get:
       tags:
@@ -385,7 +507,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/message'
-  /users/extendtokenvalidity/:
+  /users/extendtoken/:
     get:
       tags:
       - users
@@ -453,7 +575,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: '#/components/schemas/userAllData'
         403:
           description: Érvénytelen token. A "message" tartalma "invalid token"
           content:
@@ -476,14 +598,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/user'
+              $ref: '#/components/schemas/userAllData'
       responses:
         200:
           description: Sikeres kérés
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/user'
+                $ref: '#/components/schemas/userAllData'
         403:
           description: Érvénytelen token. A "message" tartalma "invalid token"
           content:
@@ -506,7 +628,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/user'
+              $ref: '#/components/schemas/userEditableData'
       responses:
         200:
           description: Sikeres kérés
@@ -559,6 +681,8 @@ components:
     loginData:
       type: object
       properties:
+        portalOwnersId:
+          type: integer
         email:
           type: string
         password:
@@ -634,9 +758,9 @@ components:
       type: object
       properties:
         date:
-          type: string
+          type: integer
         expireDate:
-          type: string
+          type: integer
         language:
           type: string
         title:
@@ -668,13 +792,15 @@ components:
         StockAvailable:
           type: number
         StockReserved:
-          type: number  
-    userBaseData:
+          type: number
+    userRegistrationsData:
       type: object
       properties:
         user:
           type: object
           properties:
+            portalOwnersId:
+              type: integer
             localSystemId:
               type: string
             name:
@@ -686,9 +812,13 @@ components:
               enum: [OWNER_SA, OWNER_USER, CUSTOMER]
             language:
               type: string
-    user:
+    userAllData:
       type: object
       properties:
+        id:
+          type: integer
+        portalOwnersId:
+          type: integer
         localSystemId:
           type: string
         emailAnnouncementsAccepted:
@@ -707,3 +837,23 @@ components:
           enum: [OWNER_SA, OWNER_USER, CUSTOMER]
         language:
           type: string
+    userEditableData:
+        type: object
+        properties:
+          gdprAccepted:
+            type: boolean
+          termsOfServiceAccepted:
+            type: boolean
+          emailAnnouncementsAccepted:
+            type: boolean
+          newsletterAccepted:
+            type: boolean
+          name:
+            type: string
+          email:
+            type: string
+          password:
+            type: string
+          language:
+            type: string
+    

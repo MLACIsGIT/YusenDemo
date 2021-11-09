@@ -5,12 +5,12 @@ export default function ReportStocks(props) {
   return (
     <div className='Stocks'>
       <GridReport
-        id='reportStocks'
-        dataEndpoint='stocks/get'
+        id='ReportWrhsStock01'
+        dataEndpoint='data/get'
         language={props.language}
         loginData={props.loginData}
         report={{
-          reportId: 'reportInvoices',
+          reportId: '',
           languageElements: languageElements
         }}
       />

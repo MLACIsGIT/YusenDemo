@@ -14,7 +14,6 @@ export default class LoginData {
 
       return;
     }
-
     this.token = token;
     this.tokenData = this.getDataFromToken();
   }

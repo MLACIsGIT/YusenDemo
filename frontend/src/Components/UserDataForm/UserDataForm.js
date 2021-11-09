@@ -155,10 +155,9 @@ export default function UserDataForm(props) {
           if (data.status !== 200) {
             throw new Error('result-nok');
           }
-          return data.json();
-        })
-        .then((jsonData) => {
           showMessageShortly('result-ok', 'success');
+
+          return data.json();
         })
         .catch((error) => {
           showMessageShortly(

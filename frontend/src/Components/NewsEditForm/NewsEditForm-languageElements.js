@@ -42,16 +42,28 @@ export const languageElements = {
       en: "Link:",
     },
 
-    "btn-login": {
+    "btn-save": {
       hu: "Mentés",
       de: "Speichern",
       en: "Save",
+    },
+
+    "btn-cancel": {
+      hu: "Vissza",
+      de: "Zurück",
+      en: "Back",
     },
 
     "validation-required": {
       hu: "Kérem töltse ki a mezőt",
       de: "Dateneingabe erforderlich",
       en: "Please fill in the field",
+    },
+
+    "validation-validURL": {
+      hu: "A cím hibás",
+      de: "Falsches Format",
+      en: "The address is incorrect",
     },
 
     "no-response": {

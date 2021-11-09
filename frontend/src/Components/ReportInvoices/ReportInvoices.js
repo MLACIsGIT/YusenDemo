@@ -1,17 +1,32 @@
-import GridReport from '../GridReport/GridReport';
-import { languageElements } from './ReportInvoices-languageElements';
+import GridReport from "../GridReport/GridReport";
+import { languageElements } from "./ReportInvoices-languageElements";
+import ReportInvoicesFunctionCell from "./ReportInvoicesFunctionCell";
 
 export default function ReportInvoices(props) {
   return (
-    <div className='reportInvoices'>
+    <div className="reportInvoices">
       <GridReport
-        id='reportInvoices'
-        dataEndpoint='invoices/get'
+        id="ReportInvoices01"
+        dataEndpoint="data/get"
         language={props.language}
         loginData={props.loginData}
         report={{
-          reportId: 'reportInvoices',
-          languageElements: languageElements
+          reportId: "ReportInvoices01",
+          languageElements: languageElements,
+          frameworkComponents: {
+            ReportInvoicesFunctionCell,
+          },
+          cellRenderers: [
+            {
+              field: "ExternalSystem_ID",
+              cellRenderer: "ReportInvoicesFunctionCell",
+              cellRendererParams: {
+                clicked: function (field) {
+                  alert(`+++ ReportInvoices.js: ${field} was clicked`);
+                },
+              },
+            },
+          ],
         }}
       />
     </div>

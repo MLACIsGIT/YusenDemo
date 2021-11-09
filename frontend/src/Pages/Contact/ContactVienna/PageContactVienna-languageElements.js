@@ -1,9 +1,9 @@
 export const languageElements = {
   items: {
     title1: {
-      hu: 'Demonstration International Kft',
-      de: 'Demonstration International Kft',
-      en: 'Demonstration International Kft',
+      hu: 'Yusen Logistics (Hungary) Kft',
+      de: 'Yusen Logistics (Hungary) Kft',
+      en: 'Yusen Logistics (Hungary) Kft',
     },
 
     title2: {
@@ -13,9 +13,9 @@ export const languageElements = {
     },
 
     info1: {
-      hu: 'Address 1',
-      de: 'Address 1',
-      en: 'Address 1',
+      hu: 'Speditionsgeb.Obj. 263/3',
+      de: 'Speditionsgeb.Obj. 263/3',
+      en: 'Speditionsgeb.Obj. 263/3',
     },
 
     info2: {
@@ -37,9 +37,9 @@ export const languageElements = {
     },
 
     info5: {
-      hu: 'Tel: 1234567',
-      de: 'Tel: 1234567',
-      en: 'Tel: 1234567',
+      hu: 'Tel: +43 1 7007 32830',
+      de: 'Tel: +43 1 7007 32830',
+      en: 'Tel: +43 1 7007 32830',
     },
 
     info6: {
@@ -49,9 +49,9 @@ export const languageElements = {
     },
 
     email: {
-      hu: 'info@demo.at',
-      de: 'info@demo.at',
-      en: 'info@demo.at',
+      hu: 'austria@at.yusen-logistics.com',
+      de: 'austria@at.yusen-logistics.com',
+      en: 'austria@at.yusen-logistics.com',
     },
   },
 };

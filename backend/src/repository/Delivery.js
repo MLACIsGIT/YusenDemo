@@ -1,9 +1,8 @@
-import { DeliveriesModel } from '../models/db/DeliveriesModel';
 import User from '../repository/User';
 
 export default class Delivery {
   static async add(delivery) {
-    const newDelivery = new DeliveriesModel({
+    const newDelivery = {
       externalSystemId: delivery.externalSystemId,
       PartnerId: delivery.PartnerId,
       OrderNo: delivery.OrderNo,
@@ -13,7 +12,7 @@ export default class Delivery {
       UnloadingPlace: delivery.UnloadingPlace,
       UnloadingDate: delivery.UnloadingDate,
       Status: delivery.Status,  
-    });
+    };
 
     try {
       const result = await newDelivery.save();
@@ -34,7 +33,7 @@ export default class Delivery {
         ],
       };
 
-      const doc = await DeliveriesModel.findAndUpdate(filter, delivery, { new: true });
+      //const doc = await DeliveriesModel.findAndUpdate(filter, delivery, { new: true });
 
       if (!doc) {
         const error = new Error('not found');
@@ -49,7 +48,6 @@ export default class Delivery {
   }
 
   static async getDocs(filters, orderBy, userId) {
-    console.log('+++ filters', filters)
     try {
       const user = await User.getById(userId);
       let filterForSelect = JSON.parse(filters ?? '{}');

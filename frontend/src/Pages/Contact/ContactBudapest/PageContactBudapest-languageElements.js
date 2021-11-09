@@ -1,9 +1,9 @@
 export const languageElements = {
   items: {
     title1: {
-      hu: "Demonstration International Kft",
-      de: "Demonstration International Kft",
-      en: "Demonstration International Kft",
+      hu: "Yusen Logistics (Hungary) Kft",
+      de: "Yusen Logistics (Hungary) Kft",
+      en: "Yusen Logistics (Hungary) Kft",
     },
 
     title2: {
@@ -13,15 +13,15 @@ export const languageElements = {
     },
 
     info1: {
-      hu: "H-1234 Budapest,",
-      de: "H-1234 Budapest,",
-      en: "H-1234 Budapest,",
+      hu: "H-1239 Budapest,",
+      de: "H-1239 Budapest,",
+      en: "H-1239 Budapest,",
     },
 
     info2: {
-      hu: "Ipar u. 1",
-      de: "Ipar u. 1",
-      en: "Ipar u. 1,",
+      hu: "Europa u. 6. (BILK ,B2 Building),",
+      de: "Europa u. 6. (BILK ,B2 Building),",
+      en: "Europa u. 6. (BILK ,B2 Building),",
     },
 
     info3: {
@@ -31,15 +31,15 @@ export const languageElements = {
     },
 
     info4: {
-      hu: "Tel: 1234567",
-      de: "Tel: 1234567",
-      en: "Tel: 1234567",
+      hu: "Tel: +36 (1) 555 2500",
+      de: "Tel: +36 (1) 555 2500",
+      en: "Tel: +36 (1) 555 2500",
     },
 
     info5: {
-      hu: "Szállítás: 1234567",
-      de: "Szállítás: 1234567",
-      en: "Szállítás: 1234567",
+      hu: "Fax: +36 (1) 555 2501",
+      de: "Fax: +36 (1) 555 2501",
+      en: "Fax: +36 (1) 555 2501",
     },
 
     info6: {
@@ -49,9 +49,9 @@ export const languageElements = {
     },
 
     email: {
-        hu: "info@demo.hu",
-        de: "info@demo.hu",
-        en: "info@demo.hu",  
+        hu: "sales@hu.yusen-logistics.com",
+        de: "sales@hu.yusen-logistics.com",
+        en: "sales@hu.yusen-logistics.com",  
     }
   },
 };
