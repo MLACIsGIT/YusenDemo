@@ -1,4 +1,5 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_FILESTREAM_FILE_ADD(
   portalOwnersId,
@@ -6,53 +7,25 @@ export async function WAT_FILESTREAM_FILE_ADD(
   parentRecordData,
   blobData
 ) {
-  const sqlRequest = new mssql.Request();
-console.log('+++ portalOwnersId', portalOwnersId)
-  sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-  sqlRequest.input(
-    'ExternalSystem_ID',
-    mssql.BigInt,
-    file.externalSystemId
-  );
-  sqlRequest.input(
-    'ExternalSystem_TransactID',
-    mssql.BigInt,
-    file.externalSystemTransactId
-  );
-  sqlRequest.input('BLOB_Account', mssql.NVarChar(50), blobData.blobAccount);
-  sqlRequest.input('BLOB_File_Path', mssql.NVarChar(255), blobData.blobPath);
-  sqlRequest.input('BLOB_File_Name', mssql.NVarChar(255), blobData.blobFileName);
-  sqlRequest.input(
-    'BLOB_Orig_File_Name',
-    mssql.NVarChar(255),
-    file.originalname
-  );
-  sqlRequest.input(
-    'BLOB_Content_Type',
-    mssql.NVarChar(50),
-    file.mimetype
-  );
-  sqlRequest.input('BLOB_File_Length', mssql.Int, file.size);
+  const storedProcedure = new StoredProcedureCaller('WAT_FILESTREAM_FILE_ADD');
+  storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+  storedProcedure.addParameter('ExternalSystem_ID', TYPES.BigInt, file.externalSystemId);
+  storedProcedure.addParameter('ExternalSystem_TransactID', TYPES.BigInt, file.externalSystemTransactId);
+  storedProcedure.addParameter('BLOB_Account', TYPES.NVarChar, blobData.blobAccount, { length: 50 });
+  storedProcedure.addParameter('BLOB_File_Path', TYPES.NVarChar, blobData.blobPath, { length: 255 });
+  storedProcedure.addParameter('BLOB_File_Name', TYPES.NVarChar, blobData.blobFileName, { length: 255 });
+  storedProcedure.addParameter('BLOB_Orig_File_Name', TYPES.NVarChar, file.originalname, { length: 255 });
+  storedProcedure.addParameter('BLOB_Content_Type', TYPES.NVarChar, file.mimetype, { length: 50 });
+  storedProcedure.addParameter('BLOB_File_Length', TYPES.Int, file.size);
+  storedProcedure.addParameter('Parent_TableCode', TYPES.NVarChar, parentRecordData.tableCode, {length: 50});
+  storedProcedure.addParameter('Parent_ExternalSystem_ID', TYPES.BigInt, parentRecordData.externalSystemId);
 
-  sqlRequest.input(
-    'Parent_TableCode',
-    mssql.NVarChar(50),
-    parentRecordData.tableCode
-  );
-  sqlRequest.input(
-    'Parent_ExternalSystem_ID',
-    mssql.BigInt,
-    parentRecordData.externalSystemId
-  );
-
-  sqlRequest.output('OUT_WAT_File_ID', mssql.Int);
-  sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-  sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+  storedProcedure.addOutputParameter('OUT_WAT_File_ID', TYPES.Int);
+  storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+  storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar);
 
   let sqlResult;
-  sqlResult = await sqlRequest.execute(
-    'WAT_FILESTREAM_FILE_ADD'
-  );
+  sqlResult = await storedProcedure.execute();
   if (sqlResult.output.OUT_HTTP_Code !== 200) {
     const error = new Error(sqlResult.output.OUT_HTTP_Message);
     error.status = sqlResult.output.OUT_HTTP_Code;

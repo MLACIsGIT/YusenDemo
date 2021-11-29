@@ -1,16 +1,17 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_FILESTREAM_GET_LIST_OF_FILES(user, parentRecordData) {
     console.log('+++ WAT_FILESTREAM_GET_LIST_OF_FILES', user, parentRecordData)
-  const sqlRequest = new mssql.Request();
-  sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, user.portalOwnersId);
-  sqlRequest.input('Parent_TableCode', mssql.NVarChar(50), parentRecordData.tableCode);
-  sqlRequest.input('Parent_ExternalSystem_ID', mssql.BigInt, parentRecordData.externalSystemId);
-  sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
-  sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-  sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+  const storedProcedure = new StoredProcedureCaller('WAT_FILESTREAM_GET_LIST_OF_FILES');
+  storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, user.portalOwnersId);
+  storedProcedure.addParameter('Parent_TableCode', TYPES.NVarChar, parentRecordData.tableCode, {length: 50});
+  storedProcedure.addParameter('Parent_ExternalSystem_ID', TYPES.BigInt, parentRecordData.externalSystemId);
+  storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
+  storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+  storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
 
-  const sqlResult = await sqlRequest.execute('WAT_FILESTREAM_GET_LIST_OF_FILES');
+  const sqlResult = await storedProcedure.execute();
   
   if (sqlResult.output.OUT_HTTP_Code !== 200) {
     const error = new Error(sqlResult.output.OUT_HTTP_Message);

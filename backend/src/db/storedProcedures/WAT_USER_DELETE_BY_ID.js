@@ -1,9 +1,10 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_USER_DELETE_BY_ID(portalOwnersId, userId) {
-    const sqlRequest = new mssql.Request();
-    sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-    sqlRequest.input('WAT_Users_ID', mssql.Int, userId);
+    const storedProcedure = new StoredProcedureCaller('WAT_USER_DELETE_BY_ID');
+    storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+    storedProcedure.addParameter('WAT_Users_ID', TYPES.Int, userId);
   
-    await sqlRequest.execute('WAT_USER_DELETE_BY_ID');
+    await storedProcedure.execute();
 }

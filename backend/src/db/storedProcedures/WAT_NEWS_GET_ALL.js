@@ -1,18 +1,19 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_NEWS_GET_ALL(portalOwnersId, language) {
-    const sqlRequest = new mssql.Request();
+    const storedProcedure = new StoredProcedureCaller('WAT_NEWS_GET_ALL');
 
-    sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-    sqlRequest.input('Language', mssql.NVarChar(3), (language) ? language : 'en');
+    storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+    storedProcedure.addParameter('Language', TYPES.NVarChar, (language) ? language : 'en', {length: 3});
 
-    sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
 
-    sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-    sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+    storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
   
     let sqlResult;
-    sqlResult = await sqlRequest.execute('WAT_NEWS_GET_ALL');
+    sqlResult = await storedProcedure.execute();
     if (sqlResult.output.OUT_HTTP_Code !== 200) {
         const error = new Error(sqlResult.output.OUT_HTTP_Message);
         error.status = sqlResult.output.OUT_HTTP_Code;

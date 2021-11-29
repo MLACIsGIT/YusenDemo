@@ -1,22 +1,23 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_USER_REGISTER(user) {
-  const sqlRequest = new mssql.Request();
+  const storedProcedure = new StoredProcedureCaller('WAT_USER_REGISTER');
 
-  sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, user.portalOwnersId);
-  sqlRequest.input('WAT_Portal_Owners_Partner_ID', mssql.NVarChar(50), user.localSystemId);
-  sqlRequest.input('UserLevels_Code', mssql.NVarChar(20), user.userLevel);
-  sqlRequest.input('Name', mssql.NVarChar(100), user.name);
-  sqlRequest.input('Lang', mssql.NVarChar(3), user.language);
-  sqlRequest.input('Email', mssql.NVarChar(128), user.email);
+  storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, user.portalOwnersId);
+  storedProcedure.addParameter('WAT_Portal_Owners_Partner_ID', TYPES.NVarChar, user.localSystemId, {length: 50});
+  storedProcedure.addParameter('UserLevels_Code', TYPES.NVarChar, user.userLevel, {length: 20});
+  storedProcedure.addParameter('Name', TYPES.NVarChar, user.name, {length: 100});
+  storedProcedure.addParameter('Lang', TYPES.NVarChar, user.language, {length: 3});
+  storedProcedure.addParameter('Email', TYPES.NVarChar, user.email, {length: 128});
 
-  sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
-  sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-  sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+  storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
+  storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+  storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
 
   let sqlResult;
 
-  sqlResult = await sqlRequest.execute('WAT_USER_REGISTER');
+  sqlResult = await storedProcedure.execute();
 
   if (sqlResult.output.OUT_HTTP_Code !== 200) {
       const error = new Error( sqlResult.output.OUT_HTTP_Message );

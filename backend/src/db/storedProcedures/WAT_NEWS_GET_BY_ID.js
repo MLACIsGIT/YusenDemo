@@ -1,17 +1,18 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_NEWS_GET_BY_ID(portalOwnersId, newsId) {
-    const sqlRequest = new mssql.Request();
+    const storedProcedure = new StoredProcedureCaller('WAT_NEWS_GET_BY_ID');
 
-    sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-    sqlRequest.input('WAT_NEWS_ID', mssql.Int, newsId);
+    storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+    storedProcedure.addParameter('WAT_NEWS_ID', TYPES.Int, newsId);
 
-    sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
-    sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-    sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
+    storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+    storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
   
     let sqlResult;
-    sqlResult = await sqlRequest.execute('WAT_NEWS_GET_BY_ID');
+    sqlResult = await storedProcedure.execute();
   
     return JSON.parse(sqlResult.output.OUT_DATA);  
 }

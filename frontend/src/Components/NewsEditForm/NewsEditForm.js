@@ -148,9 +148,9 @@ export default function NewsEditForm(props) {
         headers: {
           "Content-Type": "application/json",
           token: props.loginData.getToken(),
-          id: props.newsId,
         },
         body: JSON.stringify({
+          _id: props.newsId,
           title: fieldValues.title,
           shortDescription: fieldValues.shortDescription,
           date: fieldValues.date,

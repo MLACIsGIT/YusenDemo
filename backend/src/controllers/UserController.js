@@ -108,6 +108,7 @@ export const userController = {
         token,
       });
     } catch (error) {
+      console.log('+++ error', error)
       error.status = 410;
       next(error);
     }

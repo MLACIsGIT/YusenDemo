@@ -1,18 +1,19 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_FILESTREAM_FILE_PARAMS_GET_BY_WAT_FILES_ID(portalOwnersId, fileId) {
-    const sqlRequest = new mssql.Request();
+    const storedProcedure = new StoredProcedureCaller('WAT_FILESTREAM_FILE_PARAMS_GET_BY_WAT_FILES_ID');
 
-    sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-    sqlRequest.input('WAT_Files_ID', mssql.Int, fileId);
+    storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+    storedProcedure.addParameter('WAT_Files_ID', TYPES.Int, fileId);
 
-    sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
 
-    sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-    sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+    storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
   
     let sqlResult;
-    sqlResult = await sqlRequest.execute('WAT_FILESTREAM_FILE_PARAMS_GET_BY_WAT_FILES_ID');
+    sqlResult = await storedProcedure.execute();
     if (sqlResult.output.OUT_HTTP_Code !== 200) {
         const error = new Error(sqlResult.output.OUT_HTTP_Message);
         error.status = sqlResult.output.OUT_HTTP_Code;

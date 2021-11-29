@@ -1,30 +1,23 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_FILESTREAM_FILE_SET_DELETED(
   portalOwnersId,
   origFileName,
   parentRecordData
 ) {
-  const sqlRequest = new mssql.Request();
-  sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-  sqlRequest.input(
-    'Parent_TableCode',
-    mssql.NVarChar(50),
-    parentRecordData.tableCode
-  );
-  sqlRequest.input(
-    'Parent_ExternalSystem_ID',
-    mssql.BigInt,
-    parentRecordData.externalSystemId
-  );
-  sqlRequest.input('Orig_File_Name', mssql.NVarChar(255), origFileName);
+  const storedProcedure = new StoredProcedureCaller('WAT_FILESTREAM_FILE_SET_DELETED');
+  storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+  storedProcedure.addParameter('Parent_TableCode', TYPES.NVarChar, parentRecordData.tableCode, {length: 50});
+  storedProcedure.addParameter('Parent_ExternalSystem_ID', TYPES.BigInt, parentRecordData.externalSystemId);
+  storedProcedure.addParameter('Orig_File_Name', TYPES.NVarChar, origFileName, {length: 255});
 
-  sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
+  storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
 
-  sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-  sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+  storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+  storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
 
-  const sqlResult = await sqlRequest.execute('WAT_FILESTREAM_FILE_SET_DELETED');
+  const sqlResult = await storedProcedure.execute();
   if (
     sqlResult.output.OUT_HTTP_Code === 400 &&
     sqlResult.output.OUT_HTTP_Message === 'Not found'

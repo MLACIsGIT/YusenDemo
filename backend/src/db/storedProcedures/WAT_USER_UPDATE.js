@@ -1,29 +1,30 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_USER_UPDATE(user) {
-    const sqlRequest = new mssql.Request();
+    const storedProcedure = new StoredProcedureCaller('WAT_USER_UPDATE');
 
-    sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, user.portalOwnersId);
-    sqlRequest.input('WAT_Users_ID', mssql.Int, user._id);
+    storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, user.portalOwnersId);
+    storedProcedure.addParameter('WAT_Users_ID', TYPES.Int, user._id);
 
-    sqlRequest.input('GDPR_Accepted', mssql.Bit, user.gdprAccepted);
-    sqlRequest.input('TermsOfServiceAccepted', mssql.Bit, user.termsOfServiceAccepted);
-    sqlRequest.input('emailAnnouncementsAccepted', mssql.Bit, user.emailAnnouncementsAccepted);
-    sqlRequest.input('newsletterAccepted', mssql.Bit, user.newsletterAccepted);
-    sqlRequest.input('Name', mssql.NVarChar(100), user.name);
-    sqlRequest.input('Email', mssql.NVarChar(128), user.email);
-    sqlRequest.input('Password_hash', mssql.NVarChar(1024), user.passHash);
-    sqlRequest.input('Status', mssql.NVarChar(50), user.status);
-    sqlRequest.input('UserLevels_Code', mssql.NVarChar(20), user.userLevel);
-    sqlRequest.input('Lang', mssql.NVarChar(3), (user.language) ? user.language : 'en');
+    storedProcedure.addParameter('GDPR_Accepted', TYPES.Bit, user.gdprAccepted);
+    storedProcedure.addParameter('TermsOfServiceAccepted', TYPES.Bit, user.termsOfServiceAccepted);
+    storedProcedure.addParameter('emailAnnouncementsAccepted', TYPES.Bit, user.emailAnnouncementsAccepted);
+    storedProcedure.addParameter('newsletterAccepted', TYPES.Bit, user.newsletterAccepted);
+    storedProcedure.addParameter('Name', TYPES.NVarChar, user.name, {length: 100});
+    storedProcedure.addParameter('Email', TYPES.NVarChar, user.email, {length: 128});
+    storedProcedure.addParameter('Password_hash', TYPES.NVarChar, user.passHash, {length: 1024});
+    storedProcedure.addParameter('Status', TYPES.NVarChar, user.status, {length: 50});
+    storedProcedure.addParameter('UserLevels_Code', TYPES.NVarChar, user.userLevel, {length: 20});
+    storedProcedure.addParameter('Lang', TYPES.NVarChar, (user.language) ? user.language : 'en', {length: 3});
     
-    sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
 
-    sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-    sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+    storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
   
     let sqlResult;
-    sqlResult = await sqlRequest.execute('WAT_USER_UPDATE');
+    sqlResult = await storedProcedure.execute();
     if (sqlResult.output.OUT_HTTP_Code !== 200) {
         const error = new Error(sqlResult.output.OUT_HTTP_Message);
         error.status = sqlResult.output.OUT_HTTP_Code;

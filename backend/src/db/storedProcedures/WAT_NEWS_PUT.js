@@ -1,28 +1,26 @@
-import mssql from 'mssql';
+import { TYPES } from 'tedious';
+import StoredProcedureCaller from './StoredProcedureCaller'
 
 export async function WAT_NEWS_PUT(portalOwnersId, news) {
-    const sqlRequest = new mssql.Request();
+    const storedProcedure = new StoredProcedureCaller('WAT_NEWS_PUT');
 
-    sqlRequest.input('WAT_Portal_Owners_ID', mssql.Int, portalOwnersId);
-
-    sqlRequest.input('WAT_NEWS_ID', mssql.Int, news._id);
-    sqlRequest.input('WAT_NEWS_Date', mssql.DateTime, new Date(news.date));
-    sqlRequest.input('WAT_NEWS_ExpireDate', mssql.DateTime, new Date(news.expireDate));
-
-    sqlRequest.input('WAT_NEWS_Language', mssql.NVarChar(3), (news.language) ? news.language : 'en');
-
-    sqlRequest.input('WAT_NEWS_Title', mssql.NVarChar('max'), news.title);
-    sqlRequest.input('WAT_NEWS_ShortDescription', mssql.NVarChar('max'), news.shortDescription);
-    sqlRequest.input('WAT_NEWS_LinkToArticle', mssql.NVarChar('max'), news.linkToArticle);
+    storedProcedure.addParameter('WAT_Portal_Owners_ID', TYPES.Int, portalOwnersId);
+console.log('+++ news', news)
+    storedProcedure.addParameter('WAT_NEWS_ID', TYPES.Int, news._id);
+    storedProcedure.addParameter('WAT_NEWS_Date', TYPES.DateTime, new Date(news.date));
+    storedProcedure.addParameter('WAT_NEWS_ExpireDate', TYPES.DateTime, new Date(news.expireDate));
+    storedProcedure.addParameter('WAT_NEWS_Language', TYPES.NVarChar, (news.language) ? news.language : 'en', {length: 3});
+    storedProcedure.addParameter('WAT_NEWS_Title', TYPES.NVarChar, news.title, {length: 'max'});
+    storedProcedure.addParameter('WAT_NEWS_ShortDescription', TYPES.NVarChar, news.shortDescription, {length: 'max'});
+    storedProcedure.addParameter('WAT_NEWS_LinkToArticle', TYPES.NVarChar, news.linkToArticle, {length: 'max'});
     
+    storedProcedure.addOutputParameter('OUT_DATA', TYPES.NVarChar, '', {length: 'max'});
 
-    sqlRequest.output('OUT_DATA', mssql.NVarChar('max'));
-
-    sqlRequest.output('OUT_HTTP_Code', mssql.Int);
-    sqlRequest.output('OUT_HTTP_Message', mssql.NVarChar('max'));
+    storedProcedure.addOutputParameter('OUT_HTTP_Code', TYPES.Int);
+    storedProcedure.addOutputParameter('OUT_HTTP_Message', TYPES.NVarChar, '', {length: 'max'});
   
     let sqlResult;
-    sqlResult = await sqlRequest.execute('WAT_NEWS_PUT');
+    sqlResult = await storedProcedure.execute();
     if (sqlResult.output.OUT_HTTP_Code !== 200) {
         const error = new Error(sqlResult.output.OUT_HTTP_Message);
         error.status = sqlResult.output.OUT_HTTP_Code;
