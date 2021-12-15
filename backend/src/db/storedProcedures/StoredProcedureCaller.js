@@ -1,5 +1,5 @@
 import { Request } from "tedious";
-import { dbConnection } from '../dbConnection';
+import { opendbConnection, dbConnection } from '../dbConnection';
 
 export default class StoredProcedureCaller {
     constructor(procName, timeOut) {
@@ -12,12 +12,13 @@ export default class StoredProcedureCaller {
         }
     }
 
-    addParameter(name, type, value) {
+    addParameter(name, type, value, options) {
         this.params.push({
             direction: 'input',
             name,
             type,
             value,
+            options,
         })
     }
 
@@ -32,6 +33,8 @@ export default class StoredProcedureCaller {
     }
 
     async execute() {
+        await opendbConnection();
+
         const promise = new Promise((res, rej) => {
             const output = {};
             let columns = [];
@@ -41,7 +44,6 @@ export default class StoredProcedureCaller {
                 if (err) {
                     rej(err);
                 }
-                res({output, columns, recordset});
             });
 
             request.setTimeout = parseInt(process.env.DB_TIMEOUT);
@@ -54,12 +56,16 @@ export default class StoredProcedureCaller {
                 }
             })
 
+            request.on('requestCompleted', () => {
+                res({ output, columns, recordset });
+            });
+
             request.on('returnValue', (name, value) => {
                 output[name] = value;
             });
 
             request.on('columnMetadata', (columnsMetadata) => {
-                columns =  
+                columns =
                     columnsMetadata.map(colData => (
                         {
                             name: colData.colName,
@@ -86,7 +92,6 @@ export default class StoredProcedureCaller {
                 return output
             })
             .catch(err => {
-                console.log('+++ err', err)
                 const error = new Error('Failed');
                 error.status = 500;
                 throw error;
